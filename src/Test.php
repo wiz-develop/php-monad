@@ -18,9 +18,4 @@ final readonly class Test
     {
         return $this->id;
     }
-
-    public function setId(string $id): void
-    {
-        $this->id = $id;
-    }
 }
