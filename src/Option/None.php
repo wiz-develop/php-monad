@@ -8,6 +8,8 @@ use Closure;
 use EndouMame\PhpMonad\Option;
 use Override;
 use RuntimeException;
+use EmptyIterator;
+use Traversable;
 
 /**
  * @implements Option<never>
@@ -113,5 +115,47 @@ enum None implements Option
     public function xor(Option $right): Option
     {
         return $right;
+    }
+
+    #[Override]
+    public function filter(Closure $predicate): Option
+    {
+        return $this;
+    }
+
+    #[Override]
+    public function map(Closure $callback): Option
+    {
+        return $this;
+    }
+
+    #[Override]
+    public function mapOr(Closure $callback, mixed $default): mixed
+    {
+        return $default;
+    }
+
+    #[Override]
+    public function mapOrElse(Closure $callback, Closure $default): mixed
+    {
+        return $default();
+    }
+
+    #[Override]
+    public function okOr(mixed $err): Result\Err
+    {
+        return Result\err($err);
+    }
+
+    #[Override]
+    public function okOrElse(Closure $err): Result\Err
+    {
+        return Result\err($err());
+    }
+
+    #[Override]
+    public function getIterator(): Traversable
+    {
+        return new EmptyIterator();
     }
 }

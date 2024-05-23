@@ -7,6 +7,7 @@ namespace EndouMame\PhpMonad\Option;
 use Closure;
 use EndouMame\PhpMonad\Option;
 use Override;
+use Traversable;
 
 /**
  * @template T
@@ -133,7 +134,51 @@ final readonly class Some implements Option
     public function xor(Option $right): Option
     {
         return $right instanceof Option\None
-            ? $this
-            : Option\none();
+        ? $this
+        : Option\none();
+    }
+
+    #[Override]
+    public function filter(Closure $predicate): Option
+    {
+        return $predicate($this->value)
+        ? $this
+        : Option\none();
+    }
+
+    #[Override]
+    public function map(Closure $callback): Option
+    {
+        return Option\some($callback($this->value));
+    }
+
+    #[Override]
+    public function mapOr(Closure $callback, mixed $default): mixed
+    {
+        return $callback($this->value);
+    }
+
+    #[Override]
+    public function mapOrElse(Closure $callback, Closure $default): mixed
+    {
+        return $callback($this->value);
+    }
+
+    #[Override]
+    public function okOr(mixed $err): Result\Ok
+    {
+        return Result\ok($this->value);
+    }
+
+    #[Override]
+    public function okOrElse(callable $err): Result\Ok
+    {
+        return Result\ok($this->value);
+    }
+
+    #[Override]
+    public function getIterator(): Traversable
+    {
+        yield $this->value;
     }
 }
