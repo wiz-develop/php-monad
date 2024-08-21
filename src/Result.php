@@ -72,7 +72,6 @@ interface Result extends Monad
      * @param  Closure(E) :mixed $callback
      * @return $this
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function inspectErr(Closure $callback): self;
 
     /**
@@ -80,7 +79,6 @@ interface Result extends Monad
      * @param  Result<U, E> $right
      * @return Result<U, E>
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function and(self $right): self;
 
     /**
@@ -89,7 +87,6 @@ interface Result extends Monad
      * @param  Closure(T) :Result<U, F> $right
      * @return Result<U, E|F>
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function andThen(Closure $right): self;
 
     /**
@@ -97,7 +94,6 @@ interface Result extends Monad
      * @param  Result<T, F> $right
      * @return Result<T, F>
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function or(self $right): self;
 
     /**
@@ -105,7 +101,6 @@ interface Result extends Monad
      * @param  Closure(E) :Result<T, F> $right
      * @return Result<T, F>
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function orElse(Closure $right): self;
 
     /**
@@ -113,7 +108,6 @@ interface Result extends Monad
      * @param  Closure(T) :U $callback
      * @return Result<U, E>
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function map(Closure $callback): self;
 
     /**
@@ -129,7 +123,6 @@ interface Result extends Monad
      * @param  U            $default
      * @return U
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function mapOr(Closure $callback, mixed $default): mixed;
 
     /**
@@ -143,12 +136,10 @@ interface Result extends Monad
     /**
      * @return Option<T>
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function ok(): Option;
 
     /**
      * @return Option<E>
      */
-    // #[ExamplesSetup(IgnoreUnusedResults::class)]
     public function err(): Option;
 }

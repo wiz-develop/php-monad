@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace EndouMame\PhpMonad\Result;
 
+use EndouMame\PhpMonad\Result;
+
 /**
  * Return a `Result\Ok` Result containing `$value`.
  *
@@ -13,7 +15,7 @@ namespace EndouMame\PhpMonad\Result;
  */
 function ok(mixed $value): Result\Ok
 {
-    return new Result\Ok($value);
+    return Result\Ok::unit($value);
 }
 
 /**
@@ -25,5 +27,5 @@ function ok(mixed $value): Result\Ok
  */
 function err(mixed $value): Result\Err
 {
-    return new Result\Err($value);
+    return Result\Err::unit($value);
 }

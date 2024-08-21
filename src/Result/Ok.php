@@ -2,19 +2,23 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Option;
+namespace EndouMame\PhpMonad\Result;
 
 use Closure;
 use EndouMame\PhpMonad\Option;
 use EndouMame\PhpMonad\Result;
 use Override;
+use RuntimeException;
 use Traversable;
+
+use function serialize;
+use function sprintf;
 
 /**
  * @template T
- * @implements Option<T>
+ * @implements Result<T, never>
  */
-final readonly class Some implements Option
+final readonly class Ok implements Result
 {
     /**
      * @param T $value
@@ -36,35 +40,42 @@ final readonly class Some implements Option
 
     /**
      * @template U
-     * @param  Closure(T): Option<U> $right
-     * @return Option<U>
+     * @template F
+     * @param  Closure(T) :Result<U, F> $right
+     * @return Result<U, F>
      */
     #[Override]
-    public function andThen(Closure $right): Option
+    public function andThen(Closure $right): Result
     {
         return $right($this->value);
     }
 
     #[Override]
-    public function isSome(): true
+    public function isOk(): true
     {
         return true;
     }
 
     #[Override]
-    public function isNone(): false
+    public function isErr(): false
     {
         return false;
     }
 
     #[Override]
-    public function isSomeAnd(Closure $predicate): bool
+    public function isOkAnd(Closure $predicate): bool
     {
         return $predicate($this->value);
     }
 
+    #[Override]
+    public function isErrAnd(Closure $predicate): false
+    {
+        return false;
+    }
+
     /**
-     * @throws void
+     * @return T
      */
     #[Override]
     public function expect(string $message): mixed
@@ -73,7 +84,7 @@ final readonly class Some implements Option
     }
 
     /**
-     * @throws void
+     * @return T
      */
     #[Override]
     public function unwrap(): mixed
@@ -82,23 +93,29 @@ final readonly class Some implements Option
     }
 
     /**
-     * @return T
+     * @throws RuntimeException
      */
+    #[Override]
+    public function unwrapErr(): never
+    {
+        throw new RuntimeException(sprintf('Unwrapping err on `Ok`: %s', serialize($this->value)));
+    }
+
     #[Override]
     public function unwrapOr(mixed $default): mixed
     {
         return $this->value;
     }
 
-    /**
-     * @return T
-     */
     #[Override]
     public function unwrapOrElse(Closure $default): mixed
     {
         return $this->value;
     }
 
+    /**
+     * @return $this
+     */
     #[Override]
     public function inspect(Closure $callback): self
     {
@@ -107,17 +124,26 @@ final readonly class Some implements Option
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     #[Override]
-    public function and(Option $right): Option
+    public function inspectErr(Closure $callback): self
     {
-        return $right;
+        return $this;
+    }
+
+    #[Override]
+    public function and(Result $right): Result
+    {
+        return clone $right;
     }
 
     /**
      * @return $this
      */
     #[Override]
-    public function or(Option $right): Option
+    public function or(Result $right): self
     {
         return $this;
     }
@@ -126,31 +152,29 @@ final readonly class Some implements Option
      * @return $this
      */
     #[Override]
-    public function orElse(Closure $right): Option
+    public function orElse(Closure $right): self
     {
         return $this;
     }
 
+    /**
+     * @template U
+     * @param  Closure(T) :U $callback
+     * @return self<U>
+     */
     #[Override]
-    public function xor(Option $right): Option
+    public function map(Closure $callback): self
     {
-        return $right instanceof Option\None
-        ? $this
-        : Option\none();
+        return Result\ok($callback($this->value));
     }
 
+    /**
+     * @return $this
+     */
     #[Override]
-    public function filter(Closure $predicate): Option
+    public function mapErr(Closure $callback): self
     {
-        return $predicate($this->value)
-        ? $this
-        : Option\none();
-    }
-
-    #[Override]
-    public function map(Closure $callback): Option
-    {
-        return Option\some($callback($this->value));
+        return $this;
     }
 
     #[Override]
@@ -166,25 +190,18 @@ final readonly class Some implements Option
     }
 
     /**
-     * @template E
-     * @param  E            $err
-     * @return Result\Ok<T>
+     * @return Option\Some<T>
      */
     #[Override]
-    public function okOr(mixed $err): Result\Ok
+    public function ok(): Option\Some
     {
-        return Result\ok($this->value);
+        return Option\some($this->value);
     }
 
-    /**
-     * @template E
-     * @param  Closure() :E $err
-     * @return Result\Ok<T>
-     */
     #[Override]
-    public function okOrElse(callable $err): Result\Ok
+    public function err(): Option\None
     {
-        return Result\ok($this->value);
+        return Option\none();
     }
 
     #[Override]

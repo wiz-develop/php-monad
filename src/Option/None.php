@@ -9,6 +9,7 @@ use EndouMame\PhpMonad\Option;
 use Override;
 use RuntimeException;
 use EmptyIterator;
+use EndouMame\PhpMonad\Result;
 use Traversable;
 
 /**
@@ -141,12 +142,22 @@ enum None implements Option
         return $default();
     }
 
+    /**
+     * @template E
+     * @param  E             $err
+     * @return Result\Err<E>
+     */
     #[Override]
     public function okOr(mixed $err): Result\Err
     {
         return Result\err($err);
     }
 
+    /**
+     * @template E
+     * @param  Closure() :E  $err
+     * @return Result\Err<E>
+     */
     #[Override]
     public function okOrElse(Closure $err): Result\Err
     {
