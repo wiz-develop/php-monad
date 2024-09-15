@@ -30,6 +30,7 @@ final readonly class Err implements Result
     }
 
     /**
+     * @internal
      * @template TValue
      * @param  TValue       $value
      * @return self<TValue>

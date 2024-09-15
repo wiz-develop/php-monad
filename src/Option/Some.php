@@ -24,6 +24,7 @@ final readonly class Some implements Option
     }
 
     /**
+     * @internal
      * @template TValue
      * @param  TValue       $value
      * @return self<TValue>
@@ -182,7 +183,7 @@ final readonly class Some implements Option
      * @return Result\Ok<T>
      */
     #[Override]
-    public function okOrElse(callable $err): Result\Ok
+    public function okOrElse(Closure $err): Result\Ok
     {
         return Result\ok($this->value);
     }

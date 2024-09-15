@@ -28,6 +28,7 @@ final readonly class Ok implements Result
     }
 
     /**
+     * @internal
      * @template TValue
      * @param  TValue       $value
      * @return self<TValue>

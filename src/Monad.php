@@ -8,6 +8,7 @@ use Closure;
 use IteratorAggregate;
 
 /**
+ * Monad interface.
  * @template T
  * @extends IteratorAggregate<T>
  * @immutable
@@ -15,7 +16,7 @@ use IteratorAggregate;
 interface Monad extends IteratorAggregate
 {
     /**
-     * `return` in Haskell.
+     * `return` in Haskell. (`Unit` operation.)
      * @template TValue
      * @param  TValue        $value
      * @return Monad<TValue>
@@ -23,7 +24,7 @@ interface Monad extends IteratorAggregate
     public static function unit(mixed $value): self;
 
     /**
-     * `>>=` in Haskell.
+     * `>>=` in Haskell. (`Bind` operation.)
      * @template U
      * @param  Closure(T): Monad<U> $right
      * @return Monad<U>

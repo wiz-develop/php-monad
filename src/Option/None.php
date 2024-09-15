@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace EndouMame\PhpMonad\Option;
 
 use Closure;
+use EmptyIterator;
 use EndouMame\PhpMonad\Option;
+use EndouMame\PhpMonad\Result;
 use Override;
 use RuntimeException;
-use EmptyIterator;
-use EndouMame\PhpMonad\Result;
 use Traversable;
 
 /**
@@ -19,6 +19,10 @@ enum None implements Option
 {
     case instance;
 
+    /**
+     * @internal
+     * @return self<never>
+     */
     #[Override]
     public static function unit(mixed $value): self
     {

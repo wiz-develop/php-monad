@@ -1,11 +1,22 @@
 {
     "name": "endou-mame/php-monad",
     "description": "📦 Implemented the concept of monads in functional programming in PHP.",
+    "require": {
+        "php": ">=8.3"
+    },
     "type": "library",
     "license": "MIT",
     "autoload": {
+        "files": [
+            "src/functions.php"
+        ],
         "psr-4": {
-            "EndouMame\\PhpMonad\\": "src/"
+            "EndouMame\\PhpMonad\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EndouMame\\PhpMonad\\Tests\\": "tests"
         }
     },
     "authors": [
@@ -17,8 +28,8 @@
     "minimum-stability": "stable",
     "require-dev": {
         "wiz-develop/php-cs-fixer-config": "^8.3",
-        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan": "^1.12",
         "phpunit/php-code-coverage": "^11.0",
-        "phpunit/phpunit": "^11.1"
+        "phpunit/phpunit": "^11.3"
     }
 }

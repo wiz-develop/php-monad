@@ -82,6 +82,7 @@ interface Result extends Monad
     public function and(self $right): self;
 
     /**
+     * NOTE: PHPdoc's completion by type specification in Closure doesn't work, so I'm redefining it.
      * @template U
      * @template F
      * @param  Closure(T) :Result<U, F> $right
