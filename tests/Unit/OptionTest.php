@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 /**
  * @extends MonadTest<Option>
  */
-#[TestDox('Option test')]
+#[TestDox('Option Monad test')]
 #[CoversClass(Option::class)]
 final class OptionTest extends MonadTest
 {

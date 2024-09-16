@@ -6,6 +6,7 @@ namespace EndouMame\PhpMonad\Tests\Unit;
 
 use BadFunctionCallException;
 use EndouMame\PhpMonad\Monad;
+use EndouMame\PhpMonad\Tests\Assert;
 use EndouMame\PhpMonad\Tests\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -47,17 +48,17 @@ abstract class MonadTest extends TestCase
         $f = fn (string $n): Monad => $this->_return($n . 1, $monad);
         $g = fn (string $n): Monad => $this->_return($n . 2, $monad);
 
-        $this->assertEquals(
+        Assert::assertEquals(
             $monad::unit('x')->andThen($f),
             $f('x'),
             'Monad law - Left identity (return x >>= f == f x)'
         );
-        $this->assertEquals(
+        Assert::assertEquals(
             $subject->andThen($return),
             $subject,
             'Monad law - Right identity (m >>= return == m)'
         );
-        $this->assertEquals(
+        Assert::assertEquals(
             $subject->andThen($f)->andThen($g),
             $subject->andThen(static fn ($x) => $f($x)->andThen($g)),
             'Monad law - Associativity (m >>= f) >>= g == m >>= (\x -> f x >>= g)'

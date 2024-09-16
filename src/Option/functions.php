@@ -25,3 +25,18 @@ function none(): Option\None
 {
     return Option\None::unit(null);
 }
+
+/**
+ * Transform a value into an `Option`.
+ * It will be a `Some` option containing `$value` if `$value` is different from `$noneValue` (default `null`)
+ *
+ * @template U
+ * @param  U         $value
+ * @return Option<U>
+ */
+function fromValue(mixed $value, mixed $noneValue = null): Option
+{
+    return $value === $noneValue
+        ? Option\none()
+        : Option\some($value);
+}
