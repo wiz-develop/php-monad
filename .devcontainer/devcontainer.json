@@ -24,7 +24,8 @@
 				"SanderRonde.phpstan-vscode",
 				"GitHub.copilot",
 				"GitHub.copilot-chat",
-				"recca0120.vscode-phpunit"
+				"recca0120.vscode-phpunit",
+				"saoudrizwan.claude-dev"
 			]
 		}
 	}
