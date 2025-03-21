@@ -5,23 +5,29 @@ declare(strict_types=1);
 namespace EndouMame\PhpMonad;
 
 use Closure;
+use IteratorAggregate;
 
 /**
+ * Monad interface.
  * @template T
+ * @extends IteratorAggregate<T>
+ * @immutable
  */
-interface Monad
+interface Monad extends IteratorAggregate
 {
     /**
-     * @template T2
-     * @param  Closure(T):static<T2> $f
-     * @return static<T2>
-     */
-    public function bind(Closure $f): self;
-
-    /**
+     * `return` in Haskell. (`Unit` operation.)
      * @template TValue
-     * @param  TValue         $value
-     * @return static<TValue>
+     * @param  TValue        $value
+     * @return Monad<TValue>
      */
     public static function unit(mixed $value): self;
+
+    /**
+     * `>>=` in Haskell. (`Bind` operation.)
+     * @template U
+     * @param  Closure(T): Monad<U> $right
+     * @return Monad<U>
+     */
+    public function andThen(Closure $right): self;
 }

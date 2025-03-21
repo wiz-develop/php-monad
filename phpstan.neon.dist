@@ -1,0 +1,9 @@
+includes:
+  - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    # NOTE: %rootDir% is `vendor/phpstan/phpstan`
+    tmpDir: %rootDir%/tmp
+	level: max
+	paths:
+		- src
