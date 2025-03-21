@@ -8,6 +8,9 @@
     // php-cs-fixer settings
     "php-cs-fixer.config": ".php-cs-fixer.dist.php",
     "php-cs-fixer.executablePath": "${extensionPath}/php-cs-fixer.phar",
+    // HACK: PHP8.4 に PHP-CS-Fixer が対応していないが強制的に実行するための設定
+    // TODO: PHP-CS-Fixer が PHP8.4 に対応したら削除すること！！！！
+    "php-cs-fixer.ignorePHPVersion": true,
     // PHPStan settings
     "phpstan.binPath": "vendor/bin/phpstan",
     "phpstan.configFile": "phpstan.neon.dist",

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace EndouMame\PhpMonad\Result;
 
 use Closure;
+use EmptyIterator;
+use EndouMame\PhpMonad\Option;
 use EndouMame\PhpMonad\Result;
 use Override;
 use RuntimeException;
 use Throwable;
-use EmptyIterator;
-use EndouMame\PhpMonad\Option;
 use Traversable;
 
 use function serialize;

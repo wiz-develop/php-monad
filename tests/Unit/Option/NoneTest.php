@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Tests\Unit;
+namespace EndouMame\PhpMonad\Tests\Unit\Option;
 
 use EndouMame\PhpMonad\Option;
 use EndouMame\PhpMonad\Tests\TestCase;
