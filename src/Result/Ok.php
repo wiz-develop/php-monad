@@ -137,7 +137,7 @@ final readonly class Ok implements Result
     #[Override]
     public function and(Result $right): Result
     {
-        return clone $right;
+        return $right;
     }
 
     /**

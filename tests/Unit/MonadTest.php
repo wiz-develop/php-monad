@@ -45,8 +45,8 @@ abstract class MonadTest extends TestCase
 
         $return = fn (string $v) => $this->_return($v, $monad);
 
-        $f = fn (string $n): Monad => $this->_return($n . 1, $monad);
-        $g = fn (string $n): Monad => $this->_return($n . 2, $monad);
+        $f = fn (string $n) => $this->_return($n . 1, $monad);
+        $g = fn (string $n) => $this->_return($n . 2, $monad);
 
         Assert::assertEquals(
             $monad::unit('x')->andThen($f),

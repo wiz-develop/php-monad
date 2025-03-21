@@ -6,7 +6,7 @@ namespace EndouMame\PhpMonad\Tests\Unit\Option;
 
 use EndouMame\PhpMonad\Option;
 use EndouMame\PhpMonad\Tests\Assert;
-use EndouMame\PhpMonad\Tests\Provider\OptionProvider;
+use EndouMame\PhpMonad\Tests\Provider\ValueProvider;
 use EndouMame\PhpMonad\Tests\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -18,7 +18,7 @@ use RuntimeException;
 #[CoversClass(Option::class)]
 final class UnwrapTest extends TestCase
 {
-    use OptionProvider;
+    use ValueProvider;
 
     #[Test]
     #[TestDox('expectNone test')]
