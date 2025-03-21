@@ -28,14 +28,12 @@ final class InterfaceTest extends TestCase
     public function instanceOfNone(): void
     {
         Assert::assertInstanceOf(Option\None::class, Option\none());
-        Assert::assertInstanceOf(Option\Some::class, Option\some(null));
     }
 
     #[Test]
     #[TestDox('instanceOfSome test')]
     public function instanceOfSome(): void
     {
-        Assert::assertInstanceOf(Option\None::class, Option\none());
         Assert::assertInstanceOf(Option\Some::class, Option\some(null));
     }
 }
