@@ -145,6 +145,17 @@ final readonly class Some implements Option
         return $this;
     }
 
+    /**
+     * @template F of \Throwable
+     * @return $this
+     * @throws never
+     */
+    #[Override]
+    public function orThrow(Throwable $exception): self
+    {
+        return $this;
+    }
+
     #[Override]
     public function xor(Option $right): Option
     {

@@ -136,6 +136,16 @@ interface Result extends Monad
     public function orElse(Closure $right): self;
 
     /**
+     * Returns the contained Ok value or throws the provided exception.
+     *
+     * @template F of \Throwable
+     * @param  F     $exception The exception to throw if the result is Err
+     * @return $this
+     * @throws F
+     */
+    public function orThrow(Throwable $exception): self;
+
+    /**
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.map
      * @template U
      * @param  Closure(T) :U $callback

@@ -172,6 +172,17 @@ final readonly class Ok implements Result
     }
 
     /**
+     * @template F of \Throwable
+     * @return $this
+     * @throws never
+     */
+    #[Override]
+    public function orThrow(Throwable $exception): self
+    {
+        return $this;
+    }
+
+    /**
      * @template U
      * @param  Closure(T) :U $callback
      * @return self<U>

@@ -184,6 +184,16 @@ final readonly class Err implements Result
     }
 
     /**
+     * @template F of \Throwable
+     * @throws F
+     */
+    #[Override]
+    public function orThrow(Throwable $exception): never
+    {
+        throw $exception;
+    }
+
+    /**
      * @return $this
      */
     #[Override]
