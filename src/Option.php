@@ -6,6 +6,7 @@ namespace WizDevelop\PhpMonad;
 
 use Closure;
 use RuntimeException;
+use Throwable;
 
 /**
  * Option monad as a `Maybe monad`.
@@ -61,6 +62,16 @@ interface Option extends Monad
      * @return T|U
      */
     public function unwrapOrElse(Closure $default): mixed;
+
+    /**
+     * Returns the contained Some value or throws the provided exception.
+     *
+     * @template E of \Throwable
+     * @param  E $exception The exception to throw if the option is None
+     * @return T
+     * @throws E
+     */
+    public function unwrapOrThrow(Throwable $exception): mixed;
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.inspect

@@ -132,6 +132,17 @@ final readonly class Err implements Result
     }
 
     /**
+     * @template F of \Throwable
+     * @param  F $exception
+     * @throws F
+     */
+    #[Override]
+    public function unwrapOrThrow(Throwable $exception): never
+    {
+        throw $exception;
+    }
+
+    /**
      * @return $this
      */
     #[Override]

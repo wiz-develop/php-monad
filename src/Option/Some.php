@@ -6,6 +6,7 @@ namespace WizDevelop\PhpMonad\Option;
 
 use Closure;
 use Override;
+use Throwable;
 use Traversable;
 use WizDevelop\PhpMonad\Option;
 use WizDevelop\PhpMonad\Result;
@@ -96,6 +97,18 @@ final readonly class Some implements Option
      */
     #[Override]
     public function unwrapOrElse(Closure $default): mixed
+    {
+        return $this->value;
+    }
+
+    /**
+     * @template E of \Throwable
+     * @param  E     $exception
+     * @return T
+     * @throws never
+     */
+    #[Override]
+    public function unwrapOrThrow(Throwable $exception): mixed
     {
         return $this->value;
     }
