@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WizDevelop\PhpMonad\Option;
 
-use WizDevelop\PhpMonad\Option;
 use Exception;
 use Throwable;
+use WizDevelop\PhpMonad\Option;
 
 use function is_a;
 
