@@ -1,5 +1,5 @@
 {
-    "name": "endou-mame/php-monad",
+    "name": "wiz-develop/php-monad",
     "description": "📦 Implemented the concept of monads in functional programming in PHP.",
     "require": {
         "php": ">=8.3"
