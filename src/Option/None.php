@@ -128,6 +128,17 @@ enum None implements Option
         return $right();
     }
 
+    /**
+     * @template F of \Throwable
+     * @param  F $exception
+     * @throws F
+     */
+    #[Override]
+    public function orThrow(Throwable $exception): never
+    {
+        throw $exception;
+    }
+
     #[Override]
     public function xor(Option $right): Option
     {
