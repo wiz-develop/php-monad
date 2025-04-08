@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Option;
+namespace WizDevelop\PhpMonad\Option;
 
-use EndouMame\PhpMonad\Option;
+use WizDevelop\PhpMonad\Option;
 use Exception;
 use Throwable;
 

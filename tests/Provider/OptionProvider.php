@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Tests\Provider;
+namespace WizDevelop\PhpMonad\Tests\Provider;
 
-use EndouMame\PhpMonad\Option;
+use WizDevelop\PhpMonad\Option;
 
 trait OptionProvider
 {

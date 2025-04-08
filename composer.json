@@ -11,12 +11,12 @@
             "src/functions.php"
         ],
         "psr-4": {
-            "EndouMame\\PhpMonad\\": "src"
+            "WizDevelop\\PhpMonad\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "EndouMame\\PhpMonad\\Tests\\": "tests"
+            "WizDevelop\\PhpMonad\\Tests\\": "tests"
         }
     },
     "authors": [

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Result;
+namespace WizDevelop\PhpMonad\Result;
 
-use EndouMame\PhpMonad\Result;
+use WizDevelop\PhpMonad\Result;
 
 /**
  * Return a `Result\Ok` Result containing `$value`.

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Option;
+namespace WizDevelop\PhpMonad\Option;
 
 use Closure;
-use EndouMame\PhpMonad\Option;
-use EndouMame\PhpMonad\Result;
 use Override;
 use Traversable;
+use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
 
 /**
  * @template T
