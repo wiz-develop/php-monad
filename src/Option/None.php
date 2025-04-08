@@ -8,6 +8,7 @@ use Closure;
 use EmptyIterator;
 use Override;
 use RuntimeException;
+use Throwable;
 use Traversable;
 use WizDevelop\PhpMonad\Option;
 use WizDevelop\PhpMonad\Result;
@@ -84,6 +85,17 @@ enum None implements Option
     public function unwrapOrElse(Closure $default): mixed
     {
         return $default();
+    }
+
+    /**
+     * @template E of \Throwable
+     * @param  E $exception
+     * @throws E
+     */
+    #[Override]
+    public function unwrapOrThrow(Throwable $exception): never
+    {
+        throw $exception;
     }
 
     /**

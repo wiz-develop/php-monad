@@ -78,6 +78,16 @@ interface Result extends Monad
     public function unwrapOrElse(Closure $default): mixed;
 
     /**
+     * Returns the contained Ok value or throws the provided exception.
+     *
+     * @template F of \Throwable
+     * @param  F $exception The exception to throw if the result is Err
+     * @return T
+     * @throws F
+     */
+    public function unwrapOrThrow(Throwable $exception): mixed;
+
+    /**
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.inspect
      * @param  Closure(T) :mixed $callback
      * @return $this

@@ -7,6 +7,7 @@ namespace WizDevelop\PhpMonad\Result;
 use Closure;
 use Override;
 use RuntimeException;
+use Throwable;
 use Traversable;
 use WizDevelop\PhpMonad\Option;
 use WizDevelop\PhpMonad\Result;
@@ -110,6 +111,18 @@ final readonly class Ok implements Result
 
     #[Override]
     public function unwrapOrElse(Closure $default): mixed
+    {
+        return $this->value;
+    }
+
+    /**
+     * @template F of \Throwable
+     * @param  F     $exception
+     * @return T
+     * @throws never
+     */
+    #[Override]
+    public function unwrapOrThrow(Throwable $exception): mixed
     {
         return $this->value;
     }
