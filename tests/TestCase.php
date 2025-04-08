@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Tests;
+namespace WizDevelop\PhpMonad\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Result;
+namespace WizDevelop\PhpMonad\Result;
 
 use Closure;
-use EndouMame\PhpMonad\Option;
-use EndouMame\PhpMonad\Result;
 use Override;
 use RuntimeException;
 use Traversable;
+use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
 
 use function serialize;
 use function sprintf;

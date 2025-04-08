@@ -2,11 +2,8 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad\Tests\Unit\Result;
+namespace WizDevelop\PhpMonad\Tests\Unit\Result;
 
-use EndouMame\PhpMonad\Result;
-use EndouMame\PhpMonad\Tests\Provider\ValueProvider;
-use EndouMame\PhpMonad\Tests\TestCase;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -14,6 +11,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
+use WizDevelop\PhpMonad\Result;
+use WizDevelop\PhpMonad\Tests\Provider\ValueProvider;
+use WizDevelop\PhpMonad\Tests\TestCase;
 
 #[TestDox('Result - UnwrapTest')]
 #[CoversClass(Result::class)]

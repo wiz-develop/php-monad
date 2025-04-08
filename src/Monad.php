@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EndouMame\PhpMonad;
+namespace WizDevelop\PhpMonad;
 
 use Closure;
 use IteratorAggregate;
