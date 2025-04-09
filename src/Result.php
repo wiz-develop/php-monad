@@ -114,8 +114,8 @@ interface Result extends Monad
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.and_then
      * @template U
      * @template F
-     * @param  Closure(T) :Result<U, F> $right
-     * @return Result<U, E|F>
+     * @param  Closure(T) :Result<U, F>                                                                $right
+     * @return (F is object|resource|array|string|float|int|bool|null ? Result<U, E|F> : Result<U, E>)
      */
     public function andThen(Closure $right): self;
 
