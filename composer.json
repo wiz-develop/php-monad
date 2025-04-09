@@ -31,5 +31,19 @@
         "phpstan/phpstan": "^1.12",
         "phpunit/php-code-coverage": "^11.0",
         "phpunit/phpunit": "^11.3"
+    },
+    "archive": {
+        "exclude": [
+            "/.devcontainer",
+            "/.github",
+            "/.vscode",
+            "/tests",
+            "/.clineignore",
+            "/.clinerules",
+            "/.gitignore",
+            "/.php-cs-fixer.dist.php",
+            "/phpstan.neon.dist",
+            "/phpunit.xml.dist"
+        ]
     }
 }
