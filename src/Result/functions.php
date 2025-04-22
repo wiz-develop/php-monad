@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WizDevelop\PhpMonad\Result;
 
+use Throwable;
 use WizDevelop\PhpMonad\Result;
 
 /**
@@ -47,4 +48,22 @@ function flatten(Result $result): Result
         static fn (Result $r) => $r,
         static fn (mixed $err) => Result\err($err),
     );
+}
+
+/**
+ * Creates a Result from a callable that may throw an exception.
+ *
+ * @template T
+ * @template E
+ * @param  callable(): T          $callback
+ * @param  callable(Throwable): E $errorHandler
+ * @return Result<T, E>
+ */
+function fromThrowable(callable $callback, callable $errorHandler): Result
+{
+    try {
+        return ok($callback());
+    } catch (Throwable $e) {
+        return err($errorHandler($e));
+    }
 }
