@@ -29,12 +29,14 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.is_some_and
+     *
      * @param Closure(T): bool $predicate
      */
     public function isSomeAnd(Closure $predicate): bool;
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.expect
+     *
      * @return T
      * @throws RuntimeException
      */
@@ -42,6 +44,7 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap
+     *
      * @return T
      * @throws RuntimeException
      */
@@ -49,6 +52,7 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or
+     *
      * @template U
      * @param  U   $default
      * @return T|U
@@ -57,6 +61,7 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else
+     *
      * @template U
      * @param  Closure(): U $default
      * @return T|U
@@ -75,6 +80,7 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.inspect
+     *
      * @param  Closure(T): mixed $callback
      * @return $this
      */
@@ -82,6 +88,7 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.and
+     *
      * @template U
      * @param  Option<U> $right
      * @return Option<U>
@@ -91,6 +98,7 @@ interface Option extends Monad
     /**
      * NOTE: PHPdoc's completion by type specification in Closure doesn't work, so I'm redefining it.
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.and_then
+     *
      * @template U
      * @param  Closure(T): Option<U> $right
      * @return Option<U>
@@ -99,13 +107,16 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.or
-     * @param  Option<T> $right
-     * @return Option<T>
+     *
+     * @template U
+     * @param  Option<U>   $right
+     * @return Option<T|U>
      */
     public function or(self $right): self;
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.or_else
+     *
      * @template U
      * @param  Closure(): Option<U> $right
      * @return Option<T|U>
@@ -124,13 +135,16 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.xor
-     * @param  Option<T> $right
-     * @return Option<T>
+     *
+     * @template U
+     * @param  Option<U>   $right
+     * @return Option<T|U>
      */
     public function xor(self $right): self;
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.filter
+     *
      * @param  Closure(T): bool $predicate
      * @return Option<T>
      */
@@ -138,6 +152,7 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.map
+     *
      * @template U
      * @param  Closure(T): U $callback
      * @return Option<U>
@@ -146,19 +161,23 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or
+     *
      * @template U
-     * @param  Closure(T) :U $callback
-     * @param  U             $default
-     * @return U
+     * @template V
+     * @param  Closure(T): U $callback
+     * @param  V             $default
+     * @return U|V
      */
     public function mapOr(Closure $callback, mixed $default): mixed;
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.map_or_else
+     *
      * @template U
+     * @template V
      * @param  Closure(T): U $callback
-     * @param  Closure(): U  $default
-     * @return U
+     * @param  Closure(): V  $default
+     * @return U|V
      */
     public function mapOrElse(Closure $callback, Closure $default): mixed;
 
@@ -172,8 +191,9 @@ interface Option extends Monad
 
     /**
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.ok_or_else
+     *
      * @template E
-     * @param  Closure() :E $err
+     * @param  Closure(): E $err
      * @return Result<T, E>
      */
     public function okOrElse(Closure $err): Result;

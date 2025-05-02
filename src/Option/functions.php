@@ -7,6 +7,7 @@ namespace WizDevelop\PhpMonad\Option;
 use Exception;
 use Throwable;
 use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
 
 use function is_a;
 
@@ -102,4 +103,25 @@ function flatten(Option $option): Option
     return $option instanceof Option\None
         ? $option
         : $option->unwrap();
+}
+
+/**
+ * Transposes an `Option` of a `Result` into a `Result` of an `Option`.
+ *
+ * `None` will be mapped to `Ok(None)`.
+ * `Some(Ok(_))` and `Some(Err(_))` will be mapped to `Ok(Some(_))` and `Err(_)`.
+ *
+ * @template U
+ * @template E
+ * @param  Option<Result<U, E>> $option
+ * @return Result<Option<U>, E>
+ */
+function transpose(Option $option): Result
+{
+    // @phpstan-ignore-next-line
+    return $option->mapOrElse(
+        /** @phpstan-ignore-next-line */
+        static fn (Result $result) => $result->map(Option\some(...)),
+        static fn () => Result\ok(Option\none()),
+    );
 }
