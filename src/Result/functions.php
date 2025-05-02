@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace WizDevelop\PhpMonad\Result;
 
+use Closure;
 use Throwable;
+use WizDevelop\PhpMonad\Option;
 use WizDevelop\PhpMonad\Result;
 
 /**
@@ -32,6 +34,24 @@ function err(mixed $value): Result\Err
 }
 
 /**
+ * Creates a Result from a Closure that may throw an exception.
+ *
+ * @template T
+ * @template E
+ * @param  Closure(): T          $closure
+ * @param  Closure(Throwable): E $errorHandler
+ * @return Result<T, E>
+ */
+function fromThrowable(Closure $closure, Closure $errorHandler): Result
+{
+    try {
+        return Result\ok($closure());
+    } catch (Throwable $e) {
+        return Result\err($errorHandler($e));
+    }
+}
+
+/**
  * Converts from `Result<Result<T, E>, E>` to `Result<T, E>`.
  *
  * @template T
@@ -51,19 +71,36 @@ function flatten(Result $result): Result
 }
 
 /**
- * Creates a Result from a callable that may throw an exception.
+ * Transposes a `Result` of an `Option` into an `Option` of a `Result`.
  *
- * @template T
- * @template E
- * @param  callable(): T          $callback
- * @param  callable(Throwable): E $errorHandler
- * @return Result<T, E>
+ * `Ok(None)` will be mapped to `None`.
+ * `Ok(Some(_))` and `Err(_)` will be mapped to `Some(Ok(_))` and `Some(Err(_))`.
+ *
+ * @template U
+ * @template F
+ * @param  Result<Option<U>, F> $result
+ * @return Option<Result<U, F>>
  */
-function fromThrowable(callable $callback, callable $errorHandler): Result
+function transpose(Result $result): Option
 {
-    try {
-        return ok($callback());
-    } catch (Throwable $e) {
-        return err($errorHandler($e));
+    // @phpstan-ignore return.type
+    return $result->mapOrElse(
+        /** @phpstan-ignore-next-line */
+        static fn (Option $option) => $option->map(Result\ok(...)),
+        static fn () => Option\some(clone $result),
+    );
+}
+
+/**
+ * @return Result<bool, non-empty-list<mixed>>
+ */
+/** @phpstan-ignore-next-line */
+function combine(Result ...$results): Result
+{
+    $errs = array_filter($results, static fn (Result $result) => $result->isErr());
+    if (count($errs) > 0) {
+        return Result\err(array_values(array_map(static fn (Result $result) => $result->unwrapErr(), $errs)));
     }
+
+    return Result\ok(true);
 }
