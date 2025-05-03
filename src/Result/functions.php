@@ -16,7 +16,7 @@ use WizDevelop\PhpMonad\Result;
  * @param  U            $value
  * @return Result\Ok<U>
  */
-function ok(mixed $value): Result\Ok
+function ok(mixed $value = true): Result\Ok
 {
     return Result\Ok::unit($value);
 }
