@@ -4,5 +4,6 @@ parameters:
     level: max
     paths:
         - src
+        - tests
     typeAliases:
         BasicTypes: 'int|string|bool|null|float|array|iterable|callable|resource|object'

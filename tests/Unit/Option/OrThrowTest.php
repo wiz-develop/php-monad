@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
 use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Tests\Assert;
 use WizDevelop\PhpMonad\Tests\TestCase;
 
 #[TestDox('Option - OrThrow メソッドのテスト')]
@@ -27,9 +28,9 @@ final class OrThrowTest extends TestCase
 
         $result = $some->orThrow($exception);
 
-        $this->assertSame($some, $result);
-        $this->assertTrue($result->isSome());
-        $this->assertSame(42, $result->unwrap());
+        Assert::assertSame($some, $result);
+        Assert::assertTrue($result->isSome());
+        Assert::assertSame(42, $result->unwrap());
     }
 
     #[Test]

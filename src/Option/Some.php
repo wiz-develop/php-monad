@@ -41,6 +41,9 @@ final readonly class Some implements Option
      * @param  Closure(T): Option<U> $right
      * @return Option<U>
      */
+    /**
+     * @phpstan-ignore method.childParameterType
+     */
     #[Override]
     public function andThen(Closure $right): Option
     {

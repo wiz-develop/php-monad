@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use RuntimeException;
 use Throwable;
 use WizDevelop\PhpMonad\Result;
+use WizDevelop\PhpMonad\Tests\Assert;
 use WizDevelop\PhpMonad\Tests\TestCase;
 
 #[TestDox('Result - fromThrowable メソッドのテスト')]
@@ -25,8 +26,8 @@ final class FromThrowableTest extends TestCase
 
         $result = Result\fromThrowable($callback, $errorHandler);
 
-        $this->assertTrue($result->isOk());
-        $this->assertSame(42, $result->unwrap());
+        Assert::assertTrue($result->isOk());
+        Assert::assertSame(42, $result->unwrap());
     }
 
     #[Test]
@@ -38,7 +39,7 @@ final class FromThrowableTest extends TestCase
 
         $result = Result\fromThrowable($callback, $errorHandler);
 
-        $this->assertTrue($result->isErr());
-        $this->assertSame('Test exception', $result->unwrapErr());
+        Assert::assertTrue($result->isErr());
+        Assert::assertSame('Test exception', $result->unwrapErr());
     }
 }

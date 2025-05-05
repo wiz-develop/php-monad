@@ -25,7 +25,6 @@ final class IterateTest extends TestCase
 
         Assert::assertSame([], iterator_to_array($result = Result\err(null)));
 
-        // @phpstan-ignore-next-line
         Assert::assertIsIterable($result = Result\ok(42));
 
         Assert::assertSame([42], iterator_to_array($result = Result\ok(42)));

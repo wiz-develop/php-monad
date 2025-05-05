@@ -30,7 +30,6 @@ final class InterfaceTest extends TestCase
     {
         Assert::assertInstanceOf(Result\Err::class, $result = Result\err(null));
 
-        // @phpstan-ignore-next-line
         Assert::assertNotInstanceOf(Result\Err::class, $result = Result\ok(null));
     }
 

@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Tests\Assert;
 
 use function WizDevelop\PhpMonad\Option\none;
 use function WizDevelop\PhpMonad\Option\some;
@@ -27,7 +28,7 @@ final class UnwrapOrThrowTest extends TestCase
         $option = some($value);
         $exception = new Exception('This exception should not be thrown');
 
-        $this->assertSame($value, $option->unwrapOrThrow($exception));
+        Assert::assertSame($value, $option->unwrapOrThrow($exception));
     }
 
     #[Test]

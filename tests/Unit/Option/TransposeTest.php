@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use WizDevelop\PhpMonad\Option;
 use WizDevelop\PhpMonad\Result;
+use WizDevelop\PhpMonad\Tests\Assert;
 use WizDevelop\PhpMonad\Tests\TestCase;
 
 #[TestDox('Option - transpose関数のテスト')]
@@ -24,9 +25,9 @@ final class TransposeTest extends TestCase
         /** @phpstan-ignore-next-line */
         $result = Option\transpose($option);
 
-        $this->assertTrue($result->isOk());
-        $this->assertTrue($result->unwrap()->isSome());
-        $this->assertSame(42, $result->unwrap()->unwrap());
+        Assert::assertTrue($result->isOk());
+        Assert::assertTrue($result->unwrap()->isSome());
+        Assert::assertSame(42, $result->unwrap()->unwrap());
     }
 
     #[Test]
@@ -38,8 +39,8 @@ final class TransposeTest extends TestCase
         /** @phpstan-ignore-next-line */
         $result = Option\transpose($option);
 
-        $this->assertTrue($result->isErr());
-        $this->assertSame('error', $result->unwrapErr());
+        Assert::assertTrue($result->isErr());
+        Assert::assertSame('error', $result->unwrapErr());
     }
 
     #[Test]
@@ -51,7 +52,7 @@ final class TransposeTest extends TestCase
         /** @phpstan-ignore-next-line */
         $result = Option\transpose($option);
 
-        $this->assertTrue($result->isOk());
-        $this->assertTrue($result->unwrap()->isNone());
+        Assert::assertTrue($result->isOk());
+        Assert::assertTrue($result->unwrap()->isNone());
     }
 }

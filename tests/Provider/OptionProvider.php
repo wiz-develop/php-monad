@@ -11,6 +11,9 @@ trait OptionProvider
     /**
      * @return iterable<array{Option<mixed>, mixed, mixed}>
      */
+    /**
+     * @phpstan-ignore missingType.iterableValue
+     */
     public static function fromValueMatrix(): iterable
     {
         $o = (object)[];

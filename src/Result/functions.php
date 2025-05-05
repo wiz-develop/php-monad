@@ -92,15 +92,18 @@ function transpose(Result $result): Option
 }
 
 /**
- * @return Result<bool, non-empty-list<mixed>>
+ * @template T
+ * @template E
+ * @param  (Result<T, E>|Result)           ...$results
+ * @return Result<bool, non-empty-list<E>>
  */
-/** @phpstan-ignore-next-line */
-function combine(Result ...$results): Result
+function combine(Result ...$results): Result // @phpstan-ignore-line
 {
     $errs = array_filter($results, static fn (Result $result) => $result->isErr());
     if (count($errs) > 0) {
+        // @phpstan-ignore return.type
         return Result\err(array_values(array_map(static fn (Result $result) => $result->unwrapErr(), $errs)));
     }
 
-    return Result\ok(true);
+    return Result\ok();
 }

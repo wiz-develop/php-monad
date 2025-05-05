@@ -23,7 +23,7 @@ use const DEBUG_BACKTRACE_IGNORE_ARGS;
 /**
  * @template TMonad of Monad
  */
-abstract class MonadTest extends TestCase
+abstract class MonadTestAbstract extends TestCase
 {
     /**
      * @return iterable<array{TMonad<string>}>
@@ -100,8 +100,7 @@ abstract class MonadTest extends TestCase
             $ref_class = new ReflectionClass($backtrace['class']);
             $ref_method = $ref_class->getMethod($backtrace['function']);
             $ref_type = $ref_method->getReturnType();
-
-        } elseif ($function = ($backtrace['function'] ?? null)) {
+        } elseif ($function = ($backtrace['function'] ?? null)) {/** @phpstan-ignore elseif.condNotBoolean */
             $ref_function = new ReflectionFunction($function);
             $ref_type = $ref_function->getReturnType();
         }

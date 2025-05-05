@@ -28,7 +28,6 @@ final class InterfaceTest extends TestCase
     public function instanceOfNone(): void
     {
         Assert::assertInstanceOf(Option\None::class, Option\none());
-        // @phpstan-ignore-next-line
         Assert::assertNotInstanceOf(Option\None::class, Option\some(null));
     }
 
@@ -36,7 +35,6 @@ final class InterfaceTest extends TestCase
     #[TestDox('instanceOfSome test')]
     public function instanceOfSome(): void
     {
-        // @phpstan-ignore-next-line
         Assert::assertNotInstanceOf(Option\Some::class, Option\none());
         Assert::assertInstanceOf(Option\Some::class, Option\some(null));
     }

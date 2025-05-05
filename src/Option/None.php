@@ -33,6 +33,9 @@ enum None implements Option
     /**
      * @return $this
      */
+    /**
+     * @phpstan-ignore method.childParameterType
+     */
     #[Override]
     public function andThen(Closure $right): self
     {

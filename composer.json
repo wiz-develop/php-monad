@@ -30,6 +30,13 @@
         "wiz-develop/php-cs-fixer-config": "^8.3",
         "phpstan/phpstan": "^1.12",
         "phpunit/php-code-coverage": "^11.0",
-        "phpunit/phpunit": "^11.3"
+        "phpunit/phpunit": "^11.3",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-strict-rules": "^1.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     }
 }
