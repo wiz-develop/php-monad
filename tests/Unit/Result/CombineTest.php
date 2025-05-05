@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use WizDevelop\PhpMonad\Result;
+use WizDevelop\PhpMonad\Tests\Assert;
 use WizDevelop\PhpMonad\Tests\TestCase;
 
 #[TestDox('Result - combine関数のテスト')]
@@ -26,8 +27,8 @@ final class CombineTest extends TestCase
 
         $result = Result\combine(...$results);
 
-        $this->assertTrue($result->isOk());
-        $this->assertTrue($result->unwrap());
+        Assert::assertTrue($result->isOk());
+        Assert::assertTrue($result->unwrap());
     }
 
     #[Test]
@@ -44,16 +45,14 @@ final class CombineTest extends TestCase
 
         $result = Result\combine(...$results);
 
-        $this->assertTrue($result->isErr());
+        Assert::assertTrue($result->isErr());
         $errors = $result->unwrapErr();
-        $this->assertIsArray($errors);
-        $this->assertCount(2, $errors);
+        Assert::assertIsArray($errors);
+        Assert::assertCount(2, $errors);
         // エラーの順序は配列のフィルタリング方法によって決まる
         // 2つのエラーが含まれていることを確認
-        $this->assertTrue($errors[0] === 'error1');
-        $this->assertTrue($errors[1] === 'error2');
-        // $this->assertTrue(in_array('error1', $errors, true));
-        // $this->assertTrue(in_array('error2', $errors, true));
+        Assert::assertTrue($errors[0] === 'error1');
+        Assert::assertTrue($errors[1] === 'error2');
     }
 
     #[Test]
@@ -62,7 +61,7 @@ final class CombineTest extends TestCase
     {
         $result = Result\combine();
 
-        $this->assertTrue($result->isOk());
-        $this->assertTrue($result->unwrap());
+        Assert::assertTrue($result->isOk());
+        Assert::assertTrue($result->unwrap());
     }
 }

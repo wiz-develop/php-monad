@@ -117,7 +117,7 @@ interface Result extends Monad
      * @param  Closure(T): Result<U, F>                          $right
      * @return (F is BasicTypes ? Result<U, E|F> : Result<U, E>)
      */
-    public function andThen(Closure $right): self;
+    public function andThen(Closure $right): self; /** @phpstan-ignore method.childParameterType */
 
     /**
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.or

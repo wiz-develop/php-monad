@@ -25,11 +25,9 @@ final class IsTest extends TestCase
     public function isOk(mixed $value): void
     {
         $result = Result\ok($value);
-        // @phpstan-ignore-next-line
         Assert::assertTrue($result->isOk());
 
         $result = Result\err($value);
-        // @phpstan-ignore-next-line
         Assert::assertFalse($result->isOk());
     }
 
@@ -39,11 +37,9 @@ final class IsTest extends TestCase
     public function isErr(mixed $value): void
     {
         $result = Result\ok($value);
-        // @phpstan-ignore-next-line
         Assert::assertFalse($result->isErr());
 
         $result = Result\err($value);
-        // @phpstan-ignore-next-line
         Assert::assertTrue($result->isErr());
     }
 
@@ -58,7 +54,6 @@ final class IsTest extends TestCase
         Assert::assertFalse($result->isOkAnd(static fn (mixed $v) => $v !== $value));
 
         $result = Result\err($value);
-        // @phpstan-ignore-next-line
         Assert::assertFalse($result->isOkAnd(static fn (mixed $v) => Assert::fail('predicate should be called')));
         Assert::assertFalse($result->isOkAnd(static fn (mixed $v) => Assert::fail('predicate should be called')));
     }
@@ -69,7 +64,6 @@ final class IsTest extends TestCase
     public function isErrAnd(mixed $value): void
     {
         $result = Result\ok($value);
-        // @phpstan-ignore-next-line
         Assert::assertFalse($result->isErrAnd(static fn (mixed $v) => Assert::fail('predicate should be called')));
         Assert::assertFalse($result->isErrAnd(static fn (mixed $v) => Assert::fail('predicate should be called')));
 
