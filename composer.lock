@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c783ccd266bcfdefe449f2944d204246",
+    "content-hash": "b88aed2276f98728e21b577c85c7bb69",
     "packages": [],
     "packages-dev": [
         {
@@ -4298,6 +4298,55 @@
                 "source": "https://github.com/wiz-develop/php-cs-fixer-config/tree/v8.3.2"
             },
             "time": "2024-05-24T08:02:53+00:00"
+        },
+        {
+            "name": "wiz-develop/php-value-object",
+            "version": "v0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wiz-develop/php-value-object.git",
+                "reference": "d910cee4fc9dc2b6a877de76df49d2fb0af15a33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wiz-develop/php-value-object/zipball/d910cee4fc9dc2b6a877de76df49d2fb0af15a33",
+                "reference": "d910cee4fc9dc2b6a877de76df49d2fb0af15a33",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4"
+            },
+            "require-dev": {
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/php-code-coverage": "^11.0",
+                "phpunit/phpunit": "^11.3",
+                "wiz-develop/php-cs-fixer-config": "^8.3",
+                "wiz-develop/php-monad": "^2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WizDevelop\\PhpValueObject\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "kakiuchi-shigenao",
+                    "email": "87973394+endou-mame@users.noreply.github.com"
+                }
+            ],
+            "description": "📦 The PHP Value Object library offers immutable, type-safe, and self-validating objects to model domain values using the Value Object pattern.",
+            "support": {
+                "issues": "https://github.com/wiz-develop/php-value-object/issues",
+                "source": "https://github.com/wiz-develop/php-value-object/tree/v0.4.1"
+            },
+            "time": "2025-05-05T18:28:32+00:00"
         }
     ],
     "aliases": [],

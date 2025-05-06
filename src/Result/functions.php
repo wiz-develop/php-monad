@@ -8,6 +8,7 @@ use Closure;
 use Throwable;
 use WizDevelop\PhpMonad\Option;
 use WizDevelop\PhpMonad\Result;
+use WizDevelop\PhpValueObject\Error\ErrorValue;
 
 /**
  * Return a `Result\Ok` Result containing `$value`.
@@ -93,7 +94,7 @@ function transpose(Result $result): Option
 
 /**
  * @template T
- * @template E
+ * @template E of ErrorValue
  * @param  (Result<T, E>|Result)           ...$results
  * @return Result<bool, non-empty-list<E>>
  */

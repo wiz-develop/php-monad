@@ -32,7 +32,8 @@
         "phpunit/php-code-coverage": "^11.0",
         "phpunit/phpunit": "^11.3",
         "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan-strict-rules": "^1.6"
+        "phpstan/phpstan-strict-rules": "^1.6",
+        "wiz-develop/php-value-object": "^0.4"
     },
     "config": {
         "allow-plugins": {
