@@ -120,7 +120,6 @@ function transpose(Option $option): Result
 {
     // @phpstan-ignore-next-line
     return $option->mapOrElse(
-        /** @phpstan-ignore-next-line */
         static fn (Result $result) => $result->map(Option\some(...)),
         static fn () => Result\ok(Option\none()),
     );
