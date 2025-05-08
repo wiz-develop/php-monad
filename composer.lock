@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9bf6c599082954f12385332ed2448a4",
+    "content-hash": "43124b57a82b0294cf00cb632ad80d77",
     "packages": [],
     "packages-dev": [
         {
@@ -4363,16 +4363,16 @@
         },
         {
             "name": "wiz-develop/php-value-object",
-            "version": "v0.4.4",
+            "version": "v0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wiz-develop/php-value-object.git",
-                "reference": "94c92a7e9f94a946d4f063be9cd78564a02d62b6"
+                "reference": "1a4b2b55a6e98c409edcece8aefbc0477ca2388a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wiz-develop/php-value-object/zipball/94c92a7e9f94a946d4f063be9cd78564a02d62b6",
-                "reference": "94c92a7e9f94a946d4f063be9cd78564a02d62b6",
+                "url": "https://api.github.com/repos/wiz-develop/php-value-object/zipball/1a4b2b55a6e98c409edcece8aefbc0477ca2388a",
+                "reference": "1a4b2b55a6e98c409edcece8aefbc0477ca2388a",
                 "shasum": ""
             },
             "require": {
@@ -4406,9 +4406,9 @@
             "description": "📦 The PHP Value Object library offers immutable, type-safe, and self-validating objects to model domain values using the Value Object pattern.",
             "support": {
                 "issues": "https://github.com/wiz-develop/php-value-object/issues",
-                "source": "https://github.com/wiz-develop/php-value-object/tree/v0.4.4"
+                "source": "https://github.com/wiz-develop/php-value-object/tree/v0.5.0"
             },
-            "time": "2025-05-07T02:28:22+00:00"
+            "time": "2025-05-08T04:22:06+00:00"
         }
     ],
     "aliases": [],
