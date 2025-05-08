@@ -238,4 +238,10 @@ final readonly class Ok implements Result
     {
         yield $this->value;
     }
+
+    #[Override]
+    public function match(Closure $okFn, Closure $errFn): mixed
+    {
+        return $okFn($this->value);
+    }
 }

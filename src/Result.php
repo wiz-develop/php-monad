@@ -190,4 +190,16 @@ interface Result extends Monad
      * @return Option<E>
      */
     public function err(): Option;
+
+    /**
+     * Applies one of two functions depending on whether the result is Ok or Err.
+     * Comparable to neverthrow's `match` method.
+     *
+     * @template U
+     * @template V
+     * @param  Closure(T): U $okFn  Function to apply if the Result is Ok
+     * @param  Closure(E): V $errFn Function to apply if the Result is Err
+     * @return U|V           The result of applying the appropriate function
+     */
+    public function match(Closure $okFn, Closure $errFn): mixed;
 }

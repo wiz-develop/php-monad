@@ -245,4 +245,10 @@ final readonly class Err implements Result
     {
         return new EmptyIterator();
     }
+
+    #[Override]
+    public function match(Closure $okFn, Closure $errFn): mixed
+    {
+        return $errFn($this->value);
+    }
 }
