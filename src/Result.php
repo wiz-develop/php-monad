@@ -114,8 +114,8 @@ interface Result extends Monad
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.and_then
      * @template U
      * @template F
-     * @param  Closure(T): Result<U, F>                          $right
-     * @return (F is BasicTypes ? Result<U, E|F> : Result<U, E>)
+     * @param  Closure(T): Result<U, F>                                                                                  $right
+     * @return (F is int|string|bool|null|float|array|iterable|callable|resource|object ? Result<U, E|F> : Result<U, E>)
      */
     public function andThen(Closure $right): self; /** @phpstan-ignore method.childParameterType */
 
