@@ -7,6 +7,8 @@ namespace WizDevelop\PhpMonad;
 use Closure;
 use RuntimeException;
 use Throwable;
+use WizDevelop\PhpMonad\Result\Err;
+use WizDevelop\PhpMonad\Result\Ok;
 
 /**
  * Result monad as a `Either monad`.
@@ -20,23 +22,31 @@ interface Result extends Monad
 {
     /**
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.is_ok
+     * @phpstan-assert-if-true Ok<T> $this
+     * @phpstan-assert-if-false Err<E> $this
      */
     public function isOk(): bool;
 
     /**
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.is_err
+     * @phpstan-assert-if-true Err<E> $this
+     * @phpstan-assert-if-false Ok<T> $this
      */
     public function isErr(): bool;
 
     /**
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.is_ok_and
      * @param Closure(T): bool $predicate
+     * @phpstan-assert-if-true Ok<T> $this
+     * @phpstan-assert-if-false Err<E> $this
      */
     public function isOkAnd(Closure $predicate): bool;
 
     /**
      * @see https://doc.rust-lang.org/std/result/enum.Result.html#method.is_err_and
      * @param Closure(E): bool $predicate
+     * @phpstan-assert-if-true Err<E> $this
+     * @phpstan-assert-if-false Ok<T> $this
      */
     public function isErrAnd(Closure $predicate): bool;
 

@@ -29,7 +29,7 @@ final class OrThrowTest extends TestCase
         $result = $some->orThrow($exception);
 
         Assert::assertSame($some, $result);
-        Assert::assertTrue($result->isSome());
+        Assert::assertTrue($result->isSome()); // @phpstan-ignore-line
         Assert::assertSame(42, $result->unwrap());
     }
 
