@@ -37,8 +37,6 @@ interface Option extends Monad
      * @see https://doc.rust-lang.org/std/option/enum.Option.html#method.is_some_and
      *
      * @param Closure(T): bool $predicate
-     * @phpstan-assert-if-true Some<T> $this
-     * @phpstan-assert-if-false None $this
      */
     public function isSomeAnd(Closure $predicate): bool;
 
