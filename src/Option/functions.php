@@ -36,10 +36,10 @@ function none(): Option\None
  * It will be a `Some` option containing `$value` if `$value` is different from `$noneValue` (default `null`)
  *
  * @template U
- * @param  U         $value
+ * @param  U|null    $value
  * @return Option<U>
  */
-function fromValue(mixed $value, mixed $noneValue = null, bool $strict = true): Option
+function fromValue($value, mixed $noneValue = null, bool $strict = true): Option
 {
     $same = $strict
         ? ($value === $noneValue)
@@ -55,7 +55,7 @@ function fromValue(mixed $value, mixed $noneValue = null, bool $strict = true): 
  * It will be a `Some` option containing the result if it is different from `$noneValue` (default `null`).
  *
  * @template U
- * @param  callable():U $callback
+ * @param  callable():U|null $callback
  * @return Option<U>
  */
 function of(callable $callback, mixed $noneValue = null, bool $strict = true): Option
@@ -69,7 +69,7 @@ function of(callable $callback, mixed $noneValue = null, bool $strict = true): O
  *
  * @template U
  * @template E of \Throwable
- * @param  callable():U    $callback
+ * @param  callable():U|null    $callback
  * @param  class-string<E> $exceptionClass
  * @return Option<U>
  * @throws Throwable
