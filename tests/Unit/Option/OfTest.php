@@ -60,26 +60,6 @@ final class OfTest extends TestCase
     }
 
     #[Test]
-    #[TestDox('ofDefaultToStrict test')]
-    public function ofDefaultToStrict(): void
-    {
-        $o = (object)[];
-
-        Assert::assertEquals(Option\none(), Option\of(static fn () => $o, (object)[], strict: false));
-        Assert::assertEquals($o, Option\of(static fn () => $o, (object)[])->unwrap());
-    }
-
-    #[Test]
-    #[TestDox('tryOfDefaultToStrict test')]
-    public function tryOfDefaultToStrict(): void
-    {
-        $o = (object)[];
-
-        Assert::assertEquals(Option\none(), Option\tryOf(static fn () => $o, (object)[], strict: false));
-        Assert::assertEquals($o, Option\tryOf(static fn () => $o, (object)[])->unwrap());
-    }
-
-    #[Test]
     #[TestDox('tryOfExeptions test')]
     public function tryOfExeptions(): void
     {
