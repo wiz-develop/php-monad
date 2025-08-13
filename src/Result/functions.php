@@ -8,7 +8,6 @@ use Closure;
 use Throwable;
 use WizDevelop\PhpMonad\Option;
 use WizDevelop\PhpMonad\Result;
-use WizDevelop\PhpValueObject\Error\IErrorValue;
 
 /**
  * Return a `Result\Ok` Result containing `$value`.
@@ -94,31 +93,13 @@ function transpose(Result $result): Option
 /**
  * @template T
  * @template E
- * @param  (Result<T, E>|Result)           ...$results
+ * @param  Result<covariant T, covariant E>                  ...$results
  * @return Result<bool, non-empty-list<E>>
  */
-function combine(Result ...$results): Result // @phpstan-ignore-line
+function combine(Result ...$results): Result
 {
     $errs = array_filter($results, static fn (Result $result) => $result->isErr());
     if (count($errs) > 0) {
-        // @phpstan-ignore return.type
-        return Result\err(array_values(array_map(static fn (Result $result) => $result->unwrapErr(), $errs)));
-    }
-
-    return Result\ok();
-}
-
-/**
- * @template T
- * @template E of IErrorValue
- * @param  (Result<T, E>|Result)           ...$results
- * @return Result<bool, non-empty-list<E>>
- */
-function combineWithErrorValue(Result ...$results): Result // @phpstan-ignore-line
-{
-    $errs = array_filter($results, static fn (Result $result) => $result->isErr());
-    if (count($errs) > 0) {
-        // @phpstan-ignore return.type
         return Result\err(array_values(array_map(static fn (Result $result) => $result->unwrapErr(), $errs)));
     }
 
