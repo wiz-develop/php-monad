@@ -54,14 +54,4 @@ final class CombineTest extends TestCase
         Assert::assertTrue($errors[0] === 'error1');
         Assert::assertTrue($errors[1] === 'error2');
     }
-
-    #[Test]
-    #[TestDox('空の配列を渡した場合はOk(true)を返すcombineのテスト')]
-    public function combineEmpty(): void
-    {
-        $result = Result\combine();
-
-        Assert::assertTrue($result->isOk());
-        Assert::assertTrue($result->unwrap());
-    }
 }

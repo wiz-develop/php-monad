@@ -36,16 +36,16 @@ function none(): Option\None
  * It will be a `Some` option containing `$value` if `$value` is different from `$noneValue` (default `null`)
  *
  * @template U
- * @param  U|null    $value
- * @return Option<U>
+ * @template NoneValue
+ *
+ * @param U              $value
+ * @param NoneValue|null $noneValue
+ *
+ * @return ($noneValue is null ? Option<U> : Option<U|NoneValue>)
  */
-function fromValue($value, mixed $noneValue = null, bool $strict = true): Option
+function fromValue($value, mixed $noneValue = null): Option
 {
-    $same = $strict
-        ? ($value === $noneValue)
-        : ($value == $noneValue);
-
-    return $same
+    return $value === $noneValue
         ? Option\none()
         : Option\some($value);
 }
@@ -55,12 +55,16 @@ function fromValue($value, mixed $noneValue = null, bool $strict = true): Option
  * It will be a `Some` option containing the result if it is different from `$noneValue` (default `null`).
  *
  * @template U
- * @param  callable():U|null $callback
- * @return Option<U>
+ * @template NoneValue
+ *
+ * @param callable():U   $callback
+ * @param NoneValue|null $noneValue
+ *
+ * @return ($noneValue is null ? Option<U> : Option<U|NoneValue>)
  */
-function of(callable $callback, mixed $noneValue = null, bool $strict = true): Option
+function of(callable $callback, mixed $noneValue = null): Option
 {
-    return Option\fromValue($callback(), $noneValue, $strict);
+    return Option\fromValue($callback(), $noneValue);
 }
 
 /**
@@ -68,20 +72,24 @@ function of(callable $callback, mixed $noneValue = null, bool $strict = true): O
  * but also return `Option\None` if it an exception matching $exceptionClass was thrown.
  *
  * @template U
+ * @template NoneValue
  * @template E of \Throwable
- * @param  callable():U|null    $callback
- * @param  class-string<E> $exceptionClass
- * @return Option<U>
+ *
+ * @param callable():U    $callback
+ * @param NoneValue|null  $noneValue
+ * @param class-string<E> $exceptionClass
+ *
+ * @return ($noneValue is null ? Option<U> : Option<U|NoneValue>)
+ *
  * @throws Throwable
  */
 function tryOf(
     callable $callback,
     mixed $noneValue = null,
-    bool $strict = true,
     string $exceptionClass = Exception::class,
 ): Option {
     try {
-        return Option\of($callback, $noneValue, $strict);
+        return Option\of($callback, $noneValue);
     } catch (Throwable $th) {
         if (is_a($th, $exceptionClass)) {
             return Option\none();
@@ -95,7 +103,8 @@ function tryOf(
  * Converts from `Option<Option<T>>` to `Option<T>`.
  *
  * @template U
- * @param  Option<Option<U>> $option
+ * @param Option<Option<U>> $option
+ *
  * @return Option<U>
  */
 function flatten(Option $option): Option
@@ -113,7 +122,9 @@ function flatten(Option $option): Option
  *
  * @template U
  * @template E
- * @param  Option<Result<U, E>> $option
+ *
+ * @param Option<Result<U, E>> $option
+ *
  * @return Result<Option<U>, E>
  */
 function transpose(Option $option): Result
