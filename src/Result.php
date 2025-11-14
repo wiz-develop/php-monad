@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WizDevelop\PhpMonad;
 
 use Closure;
+use JiriPudil\SealedClasses\Sealed;
 use RuntimeException;
 use Throwable;
 use WizDevelop\PhpMonad\Result\Err;
@@ -18,6 +19,7 @@ use WizDevelop\PhpMonad\Result\Ok;
  * @template E
  * @extends Monad<T>
  */
+#[Sealed(permits: [Ok::class, Err::class])]
 interface Result extends Monad
 {
     /**

@@ -6,6 +6,7 @@ namespace WizDevelop\PhpMonad;
 
 use Closure;
 use IteratorAggregate;
+use JiriPudil\SealedClasses\Sealed;
 
 /**
  * Monad interface.
@@ -13,6 +14,7 @@ use IteratorAggregate;
  * @extends IteratorAggregate<T>
  * @immutable
  */
+#[Sealed(permits: [Result::class, Option::class])]
 interface Monad extends IteratorAggregate
 {
     /**

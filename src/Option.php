@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WizDevelop\PhpMonad;
 
 use Closure;
+use JiriPudil\SealedClasses\Sealed;
 use RuntimeException;
 use Throwable;
 use WizDevelop\PhpMonad\Option\None;
@@ -17,6 +18,7 @@ use WizDevelop\PhpMonad\Option\Some;
  * @template T
  * @extends Monad<T>
  */
+#[Sealed(permits: [Some::class, None::class])]
 interface Option extends Monad
 {
     /**
