@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WizDevelop\PhpMonad\Option;
 
 use Closure;
+use NoDiscard;
 use Override;
 use Throwable;
 use Traversable;
@@ -80,6 +81,7 @@ final readonly class Some implements Option
     /**
      * @throws void
      */
+    #[NoDiscard]
     #[Override]
     public function unwrap(): mixed
     {
@@ -89,6 +91,7 @@ final readonly class Some implements Option
     /**
      * @return T
      */
+    #[NoDiscard]
     #[Override]
     public function unwrapOr(mixed $default): mixed
     {
@@ -98,6 +101,7 @@ final readonly class Some implements Option
     /**
      * @return T
      */
+    #[NoDiscard]
     #[Override]
     public function unwrapOrElse(Closure $default): mixed
     {
@@ -110,6 +114,7 @@ final readonly class Some implements Option
      * @return T
      * @throws never
      */
+    #[NoDiscard]
     #[Override]
     public function unwrapOrThrow(Throwable $exception): mixed
     {

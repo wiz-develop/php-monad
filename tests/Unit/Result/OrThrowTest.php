@@ -15,8 +15,6 @@ use WizDevelop\PhpMonad\Tests\TestCase;
 
 #[TestDox('Result - OrThrow メソッドのテスト')]
 #[CoversClass(Result::class)]
-#[CoversClass(Result\Ok::class)]
-#[CoversClass(Result\Err::class)]
 final class OrThrowTest extends TestCase
 {
     #[Test]

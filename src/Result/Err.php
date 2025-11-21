@@ -6,6 +6,7 @@ namespace WizDevelop\PhpMonad\Result;
 
 use Closure;
 use EmptyIterator;
+use NoDiscard;
 use Override;
 use RuntimeException;
 use Throwable;
@@ -103,6 +104,7 @@ final readonly class Err implements Result
     /**
      * @return E
      */
+    #[NoDiscard]
     #[Override]
     public function unwrapErr(): mixed
     {
@@ -114,6 +116,7 @@ final readonly class Err implements Result
      * @param  U $default
      * @return U
      */
+    #[NoDiscard]
     #[Override]
     public function unwrapOr(mixed $default): mixed
     {
@@ -125,6 +128,7 @@ final readonly class Err implements Result
      * @param  Closure(E): U $default
      * @return U
      */
+    #[NoDiscard]
     #[Override]
     public function unwrapOrElse(Closure $default): mixed
     {

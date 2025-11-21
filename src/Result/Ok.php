@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WizDevelop\PhpMonad\Result;
 
 use Closure;
+use NoDiscard;
 use Override;
 use RuntimeException;
 use Throwable;
@@ -92,6 +93,7 @@ final readonly class Ok implements Result
     /**
      * @return T
      */
+    #[NoDiscard]
     #[Override]
     public function unwrap(): mixed
     {
@@ -107,12 +109,14 @@ final readonly class Ok implements Result
         throw new RuntimeException(sprintf('Unwrapping err on `Ok`: %s', serialize($this->value)));
     }
 
+    #[NoDiscard]
     #[Override]
     public function unwrapOr(mixed $default): mixed
     {
         return $this->value;
     }
 
+    #[NoDiscard]
     #[Override]
     public function unwrapOrElse(Closure $default): mixed
     {
@@ -125,6 +129,7 @@ final readonly class Ok implements Result
      * @return T
      * @throws never
      */
+    #[NoDiscard]
     #[Override]
     public function unwrapOrThrow(Throwable $exception): mixed
     {
