@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WizDevelop\PhpMonad\Result;
 
 use Closure;
+use Deprecated;
 use NoDiscard;
 use Override;
 use RuntimeException;
@@ -244,6 +245,7 @@ final readonly class Ok implements Result
         yield $this->value;
     }
 
+    #[Deprecated]
     #[Override]
     public function match(Closure $okFn, Closure $errFn): mixed
     {

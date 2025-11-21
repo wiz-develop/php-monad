@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WizDevelop\PhpMonad\Result;
 
 use Closure;
+use Deprecated;
 use EmptyIterator;
 use NoDiscard;
 use Override;
@@ -250,6 +251,7 @@ final readonly class Err implements Result
         return new EmptyIterator();
     }
 
+    #[Deprecated]
     #[Override]
     public function match(Closure $okFn, Closure $errFn): mixed
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WizDevelop\PhpMonad;
 
 use Closure;
+use Deprecated;
 use JiriPudil\SealedClasses\Sealed;
 use RuntimeException;
 use Throwable;
@@ -209,5 +210,6 @@ interface Result extends Monad
      * @param  Closure(E): V $errFn Function to apply if the Result is Err
      * @return U|V           The result of applying the appropriate function
      */
+    #[Deprecated]
     public function match(Closure $okFn, Closure $errFn): mixed;
 }
