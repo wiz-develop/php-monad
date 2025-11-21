@@ -6,6 +6,7 @@ namespace WizDevelop\PhpMonad\Option;
 
 use Closure;
 use EmptyIterator;
+use NoDiscard;
 use Override;
 use RuntimeException;
 use Throwable;
@@ -78,12 +79,14 @@ enum None implements Option
         $this->expect('Unwrapping a `None` value');
     }
 
+    #[NoDiscard]
     #[Override]
     public function unwrapOr(mixed $default): mixed
     {
         return $default;
     }
 
+    #[NoDiscard]
     #[Override]
     public function unwrapOrElse(Closure $default): mixed
     {
