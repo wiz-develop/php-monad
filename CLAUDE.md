@@ -33,6 +33,22 @@ vendor/bin/phpunit --filter testMethodName
 vendor/bin/php-cs-fixer fix
 ```
 
+### ドキュメント
+
+```bash
+# textlint チェック
+npm run textlint
+
+# textlint 自動修正
+npm run textlint:fix
+
+# VitePress 開発サーバー
+npm run docs:dev
+
+# VitePress ビルド
+npm run docs:build
+```
+
 ## アーキテクチャ
 
 ### モナド階層
@@ -41,7 +57,7 @@ vendor/bin/php-cs-fixer fix
 Monad (interface)
 ├── Option (interface) - Maybe モナド
 │   ├── Some<T>        - 値を保持
-│   └── None           - 値なし
+│   └── None           - 値なし (enum)
 └── Result (interface) - Either モナド
     ├── Ok<T>          - 成功値
     └── Err<E>         - エラー値
@@ -54,11 +70,28 @@ Monad (interface)
 - `src/Option/`, `src/Result/` - 具象クラスとヘルパー関数
 - `src/functions.php` - 全ヘルパー関数のオートロード
 
-### ヘルパー関数
+### ヘルパー関数の使用法
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none, fromValue, of, tryOf, flatten, transpose};
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable, flatten, transpose, combine};
+use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
+
+// Option
+Option\some(42);
+Option\none();
+Option\fromValue($value);
+Option\of($callback);
+Option\tryOf($callback, null, Exception::class);
+Option\flatten($nested);
+Option\transpose($optionOfResult);
+
+// Result
+Result\ok(42);
+Result\err('error');
+Result\fromThrowable($closure, $errorHandler);
+Result\flatten($nested);
+Result\transpose($resultOfOption);
+Result\combine(...$results);
 ```
 
 ## コーディング規約
@@ -69,3 +102,9 @@ use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable, flatten, transp
 - `#[Override]` 属性必須
 - `readonly class` で不変性を保証
 - テンプレート型による型安全性 (`@template T`)
+
+## テスト構成
+
+- `tests/Unit/Option/` - Option 関連のテスト (Some, None, functions)
+- `tests/Unit/Result/` - Result 関連のテスト (Ok, Err, functions)
+- 各具象クラスに対応するテストファイルが存在
