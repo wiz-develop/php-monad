@@ -7,7 +7,6 @@ on:
     paths:
       - 'docs/**'
       - 'src/**'
-      - 'package.json'
       - 'phpdoc.xml'
       - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
@@ -44,15 +43,19 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: docs/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+        working-directory: docs
 
       - name: Run textlint
         run: npm run textlint
+        working-directory: docs
 
       - name: Build with VitePress
-        run: npm run docs:build
+        run: npm run build
+        working-directory: docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
