@@ -37,16 +37,16 @@ vendor/bin/php-cs-fixer fix
 
 ```bash
 # textlint チェック
-npm run textlint
+cd docs && npm run textlint
 
 # textlint 自動修正
-npm run textlint:fix
+cd docs && npm run textlint:fix
 
 # VitePress 開発サーバー
-npm run docs:dev
+cd docs && npm run dev
 
 # VitePress ビルド
-npm run docs:build
+cd docs && npm run build
 ```
 
 ## アーキテクチャ
