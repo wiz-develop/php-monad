@@ -7,10 +7,10 @@
 ### 配列からの安全な値取得
 
 ```php
-use function WizDevelop\PhpMonad\Option\fromValue;
+use WizDevelop\PhpMonad\Option;
 
 function getConfig(array $config, string $key): Option {
-    return fromValue($config[$key] ?? null);
+    return Option\fromValue($config[$key] ?? null);
 }
 
 $timeout = getConfig($config, 'database.timeout')
@@ -22,7 +22,7 @@ $timeout = getConfig($config, 'database.timeout')
 ### ネストしたオブジェクトの安全なアクセス
 
 ```php
-use function WizDevelop\PhpMonad\Option\fromValue;
+use WizDevelop\PhpMonad\Option;
 
 class User {
     public function __construct(
@@ -42,7 +42,7 @@ class Address {
     ) {}
 }
 
-$city = fromValue($user)
+$city = Option\fromValue($user)
     ->map(fn($u) => $u->profile)
     ->map(fn($p) => $p?->address)
     ->map(fn($a) => $a?->city)
@@ -54,20 +54,20 @@ $city = fromValue($user)
 ### HTTP リクエストの Result ラッピング
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable};
+use WizDevelop\PhpMonad\Result;
 
 function fetchUser(int $id): Result {
-    return fromThrowable(
+    return Result\fromThrowable(
         fn() => file_get_contents("https://api.example.com/users/$id"),
         fn($e) => ['type' => 'network_error', 'message' => $e->getMessage()]
     )
-    ->andThen(fn($body) => fromThrowable(
+    ->andThen(fn($body) => Result\fromThrowable(
         fn() => json_decode($body, true, flags: JSON_THROW_ON_ERROR),
         fn($e) => ['type' => 'parse_error', 'message' => $e->getMessage()]
     ))
     ->andThen(fn($data) => isset($data['id'])
-        ? ok($data)
-        : err(['type' => 'invalid_response', 'message' => 'Missing id field'])
+        ? Result\ok($data)
+        : Result\err(['type' => 'invalid_response', 'message' => 'Missing id field'])
     );
 }
 
@@ -81,12 +81,12 @@ $user = fetchUser(123)
 ### レスポンスキャッシュとフォールバック
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none, fromValue};
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
 
 function getCachedUser(int $id): Option {
     $cached = cache()->get("user:$id");
-    return fromValue($cached);
+    return Option\fromValue($cached);
 }
 
 function fetchAndCacheUser(int $id): Result {
@@ -96,7 +96,7 @@ function fetchAndCacheUser(int $id): Result {
 
 // キャッシュを優先し、なければ API から取得
 $user = getCachedUser($id)
-    ->map(fn($data) => ok($data))
+    ->map(fn($data) => Result\ok($data))
     ->unwrapOrElse(fn() => fetchAndCacheUser($id))
     ->unwrapOr(null);
 ```
@@ -106,39 +106,39 @@ $user = getCachedUser($id)
 ### 単一フィールドの検証
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
 function validateEmail(string $email): Result {
     if (empty($email)) {
-        return err('メールアドレスは必須です');
+        return Result\err('メールアドレスは必須です');
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return err('メールアドレスの形式が正しくありません');
+        return Result\err('メールアドレスの形式が正しくありません');
     }
-    return ok($email);
+    return Result\ok($email);
 }
 
 function validatePassword(string $password): Result {
     if (strlen($password) < 8) {
-        return err('パスワードは 8 文字以上である必要があります');
+        return Result\err('パスワードは 8 文字以上である必要があります');
     }
     if (!preg_match('/[A-Z]/', $password)) {
-        return err('パスワードには大文字を含める必要があります');
+        return Result\err('パスワードには大文字を含める必要があります');
     }
     if (!preg_match('/[0-9]/', $password)) {
-        return err('パスワードには数字を含める必要があります');
+        return Result\err('パスワードには数字を含める必要があります');
     }
-    return ok($password);
+    return Result\ok($password);
 }
 ```
 
 ### フォーム全体の検証
 
 ```php
-use function WizDevelop\PhpMonad\Result\combine;
+use WizDevelop\PhpMonad\Result;
 
 function validateRegistrationForm(array $data): Result {
-    return combine(
+    return Result\combine(
         validateEmail($data['email'] ?? ''),
         validatePassword($data['password'] ?? ''),
         validateName($data['name'] ?? '')
@@ -163,7 +163,7 @@ if ($result->isErr()) {
 ### 検証とデータ変換の組み合わせ
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
 class RegistrationData {
     public function __construct(
@@ -185,10 +185,10 @@ function validateAndTransform(array $data): Result {
             $passwordResult->err()->unwrapOr(null),
             $nameResult->err()->unwrapOr(null),
         ]);
-        return err($errors);
+        return Result\err($errors);
     }
 
-    return ok(new RegistrationData(
+    return Result\ok(new RegistrationData(
         $emailResult->unwrap(),
         $passwordResult->unwrap(),
         $nameResult->unwrap()
@@ -201,8 +201,8 @@ function validateAndTransform(array $data): Result {
 ### リポジトリパターン
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none};
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable};
+use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
 
 interface UserRepository {
     public function findById(int $id): Option;
@@ -218,12 +218,12 @@ class PdoUserRepository implements UserRepository {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $row === false
-            ? none()
-            : some(User::fromArray($row));
+            ? Option\none()
+            : Option\some(User::fromArray($row));
     }
 
     public function save(User $user): Result {
-        return fromThrowable(
+        return Result\fromThrowable(
             function () use ($user) {
                 $stmt = $this->pdo->prepare(
                     'INSERT INTO users (name, email) VALUES (?, ?)'
@@ -240,10 +240,10 @@ class PdoUserRepository implements UserRepository {
 ### トランザクション処理
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable};
+use WizDevelop\PhpMonad\Result;
 
 function transferMoney(Account $from, Account $to, int $amount): Result {
-    return fromThrowable(
+    return Result\fromThrowable(
         function () use ($from, $to, $amount) {
             $this->pdo->beginTransaction();
 
@@ -271,18 +271,18 @@ function transferMoney(Account $from, Account $to, int $amount): Result {
 ### 設定ファイルの読み込み
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable};
+use WizDevelop\PhpMonad\Result;
 
 function loadConfig(string $path): Result {
     if (!file_exists($path)) {
-        return err("設定ファイルが見つかりません: $path");
+        return Result\err("設定ファイルが見つかりません: $path");
     }
 
-    return fromThrowable(
+    return Result\fromThrowable(
         fn() => file_get_contents($path),
         fn($e) => "ファイルの読み込みに失敗しました: {$e->getMessage()}"
     )
-    ->andThen(fn($content) => fromThrowable(
+    ->andThen(fn($content) => Result\fromThrowable(
         fn() => json_decode($content, true, flags: JSON_THROW_ON_ERROR),
         fn($e) => "JSON のパースに失敗しました: {$e->getMessage()}"
     ))
@@ -292,26 +292,26 @@ function loadConfig(string $path): Result {
 // 使用例
 $config = loadConfig('/etc/app/config.json')
     ->orElse(fn() => loadConfig('./config.json'))  // フォールバック
-    ->orElse(fn() => ok(Config::default()))        // デフォルト設定
+    ->orElse(fn() => Result\ok(Config::default()))        // デフォルト設定
     ->unwrap();
 ```
 
 ### ファイルの安全な書き込み
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable};
+use WizDevelop\PhpMonad\Result;
 
 function writeFile(string $path, string $content): Result {
     $dir = dirname($path);
 
     if (!is_dir($dir)) {
-        return fromThrowable(
+        return Result\fromThrowable(
             fn() => mkdir($dir, 0755, true),
             fn($e) => "ディレクトリの作成に失敗しました: {$e->getMessage()}"
         )->andThen(fn() => writeFile($path, $content));
     }
 
-    return fromThrowable(
+    return Result\fromThrowable(
         fn() => file_put_contents($path, $content),
         fn($e) => "ファイルの書き込みに失敗しました: {$e->getMessage()}"
     )->map(fn($bytes) => $bytes > 0);
@@ -323,7 +323,7 @@ function writeFile(string $path, string $content): Result {
 ### ユーザー登録サービス
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, combine};
+use WizDevelop\PhpMonad\Result;
 
 class UserRegistrationService {
     public function __construct(
@@ -343,7 +343,7 @@ class UserRegistrationService {
     }
 
     private function validate(array $data): Result {
-        return combine(
+        return Result\combine(
             validateEmail($data['email'] ?? ''),
             validatePassword($data['password'] ?? ''),
             validateName($data['name'] ?? '')
@@ -353,8 +353,8 @@ class UserRegistrationService {
     private function checkDuplicate(array $data): Result {
         return $this->users->findByEmail($data['email'])
             ->isSome()
-            ? err('このメールアドレスは既に登録されています')
-            : ok($data);
+            ? Result\err('このメールアドレスは既に登録されています')
+            : Result\ok($data);
     }
 
     private function createUser(array $data): Result {
@@ -380,9 +380,9 @@ class UserRegistrationService {
 ### データ変換パイプライン
 
 ```php
-use function WizDevelop\PhpMonad\Option\some;
+use WizDevelop\PhpMonad\Option;
 
-$result = some($rawData)
+$result = Option\some($rawData)
     ->map(fn($data) => trim($data))
     ->filter(fn($data) => strlen($data) > 0)
     ->map(fn($data) => json_decode($data, true))
@@ -395,12 +395,12 @@ $result = some($rawData)
 ### エラーリカバリーパイプライン
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
 $result = fetchFromPrimarySource($id)
     ->orElse(fn() => fetchFromSecondarySource($id))
     ->orElse(fn() => fetchFromCache($id))
-    ->orElse(fn() => ok(getDefaultValue()))
+    ->orElse(fn() => Result\ok(getDefaultValue()))
     ->inspect(fn($data) => updateCache($id, $data))
     ->unwrap();
 ```
