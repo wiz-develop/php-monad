@@ -10,10 +10,10 @@ Option には 2 つの状態があります。
 - `None`: 値がない状態
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none};
+use WizDevelop\PhpMonad\Option;
 
-$some = some(42);    // Some<int> - 値あり
-$none = none();      // None - 値なし
+$some = Option\some(42);    // Some<int> - 値あり
+$none = Option\none();      // None - 値なし
 ```
 
 ## Option を作成する
@@ -23,10 +23,10 @@ $none = none();      // None - 値なし
 最も基本的な作成方法です。
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none};
+use WizDevelop\PhpMonad\Option;
 
-$value = some('hello');   // Some<string>
-$empty = none();          // None
+$value = Option\some('hello');   // Some<string>
+$empty = Option\none();          // None
 ```
 
 ### fromValue
@@ -34,16 +34,16 @@ $empty = none();          // None
 既存の値を Option に変換します。第 2 引数で「None とみなす値」を指定できます。
 
 ```php
-use function WizDevelop\PhpMonad\Option\fromValue;
+use WizDevelop\PhpMonad\Option;
 
 // null は None になる（デフォルト）
-$opt1 = fromValue($user);           // $user が null なら None、そうでなければ Some
+$opt1 = Option\fromValue($user);           // $user が null なら None、そうでなければ Some
 
 // 0 を None とみなす
-$opt2 = fromValue($count, 0);       // $count が 0 なら None
+$opt2 = Option\fromValue($count, 0);       // $count が 0 なら None
 
 // 空文字を None とみなす
-$opt3 = fromValue($name, '');       // $name が '' なら None
+$opt3 = Option\fromValue($name, '');       // $name が '' なら None
 ```
 
 ### of
@@ -51,9 +51,9 @@ $opt3 = fromValue($name, '');       // $name が '' なら None
 関数の戻り値を Option に変換します。
 
 ```php
-use function WizDevelop\PhpMonad\Option\of;
+use WizDevelop\PhpMonad\Option;
 
-$opt = of(fn() => getUser($id));
+$opt = Option\of(fn() => getUser($id));
 
 // 戻り値が null なら None、そうでなければ Some
 ```
@@ -63,9 +63,9 @@ $opt = of(fn() => getUser($id));
 関数を実行し、例外が発生した場合は None を返します。
 
 ```php
-use function WizDevelop\PhpMonad\Option\tryOf;
+use WizDevelop\PhpMonad\Option;
 
-$date = tryOf(
+$date = Option\tryOf(
     fn() => new DateTimeImmutable($dateString),
     null,
     \DateMalformedStringException::class
@@ -79,7 +79,7 @@ $date = tryOf(
 ### isSome / isNone
 
 ```php
-$opt = some(42);
+$opt = Option\some(42);
 
 if ($opt->isSome()) {
     // 値がある場合の処理
@@ -95,12 +95,12 @@ if ($opt->isNone()) {
 値があり、かつ述語を満たす場合に `true` を返します。
 
 ```php
-$opt = some(10);
+$opt = Option\some(10);
 
 $opt->isSomeAnd(fn($x) => $x > 5);   // true
 $opt->isSomeAnd(fn($x) => $x > 15);  // false
 
-none()->isSomeAnd(fn($x) => true);   // false
+Option\none()->isSomeAnd(fn($x) => true);   // false
 ```
 
 ## 値を取得する
@@ -110,10 +110,10 @@ none()->isSomeAnd(fn($x) => true);   // false
 値を取得します。None の場合は例外をスローします。
 
 ```php
-$opt = some(42);
+$opt = Option\some(42);
 $value = $opt->unwrap();  // 42
 
-$none = none();
+$none = Option\none();
 $none->unwrap();  // RuntimeException をスロー
 ```
 
@@ -122,10 +122,10 @@ $none->unwrap();  // RuntimeException をスロー
 カスタムエラーメッセージで値を取得します。
 
 ```php
-$opt = some(42);
+$opt = Option\some(42);
 $value = $opt->expect('値が必要です');  // 42
 
-$none = none();
+$none = Option\none();
 $none->expect('値が必要です');  // RuntimeException: 値が必要です
 ```
 
@@ -134,10 +134,10 @@ $none->expect('値が必要です');  // RuntimeException: 値が必要です
 デフォルト値を指定して取得します。
 
 ```php
-$opt = some(42);
+$opt = Option\some(42);
 $opt->unwrapOr(0);   // 42
 
-$none = none();
+$none = Option\none();
 $none->unwrapOr(0);  // 0
 ```
 
@@ -146,7 +146,7 @@ $none->unwrapOr(0);  // 0
 デフォルト値を遅延評価で取得します。
 
 ```php
-$none = none();
+$none = Option\none();
 $none->unwrapOrElse(fn() => expensiveCalculation());
 
 // None の場合のみ expensiveCalculation() が実行される
@@ -157,7 +157,7 @@ $none->unwrapOrElse(fn() => expensiveCalculation());
 None の場合に指定した例外をスローします。
 
 ```php
-$none = none();
+$none = Option\none();
 $none->unwrapOrThrow(new NotFoundException('ユーザーが見つかりません'));
 ```
 
@@ -168,13 +168,13 @@ $none->unwrapOrThrow(new NotFoundException('ユーザーが見つかりません
 値を変換します。None の場合はスキップされます。
 
 ```php
-$opt = some(5);
+$opt = Option\some(5);
 
 $result = $opt
     ->map(fn($x) => $x * 2)     // Some(10)
     ->map(fn($x) => "値: $x");  // Some("値: 10")
 
-$none = none();
+$none = Option\none();
 $none->map(fn($x) => $x * 2);   // None（スキップ）
 ```
 
@@ -183,10 +183,10 @@ $none->map(fn($x) => $x * 2);   // None（スキップ）
 値を変換するか、デフォルト値を返します。
 
 ```php
-$opt = some(5);
+$opt = Option\some(5);
 $opt->mapOr(fn($x) => $x * 2, 0);   // 10
 
-$none = none();
+$none = Option\none();
 $none->mapOr(fn($x) => $x * 2, 0);  // 0
 ```
 
@@ -195,7 +195,7 @@ $none->mapOr(fn($x) => $x * 2, 0);  // 0
 値を変換するか、デフォルト値を遅延評価で取得します。
 
 ```php
-$none = none();
+$none = Option\none();
 $result = $none->mapOrElse(
     fn($x) => $x * 2,
     fn() => calculateDefault()
@@ -207,7 +207,7 @@ $result = $none->mapOrElse(
 述語を満たさない場合は None になります。
 
 ```php
-$opt = some(10);
+$opt = Option\some(10);
 
 $opt->filter(fn($x) => $x > 5);   // Some(10)
 $opt->filter(fn($x) => $x > 15);  // None
@@ -218,7 +218,7 @@ $opt->filter(fn($x) => $x > 15);  // None
 値を検査（副作用を実行）し、自身を返します。デバッグに便利です。
 
 ```php
-$result = some(42)
+$result = Option\some(42)
     ->inspect(fn($x) => var_dump($x))  // int(42) を出力
     ->map(fn($x) => $x * 2)
     ->unwrap();
@@ -231,13 +231,13 @@ $result = some(42)
 両方が Some の場合、右側の Option を返します。
 
 ```php
-$a = some(1);
-$b = some(2);
+$a = Option\some(1);
+$b = Option\some(2);
 
 $a->and($b);  // Some(2)
-$a->and(none());  // None
+$a->and(Option\none());  // None
 
-none()->and($b);  // None
+Option\none()->and($b);  // None
 ```
 
 ### andThen
@@ -246,13 +246,13 @@ none()->and($b);  // None
 
 ```php
 function parsePositive(int $x): Option {
-    return $x > 0 ? some($x) : none();
+    return $x > 0 ? Option\some($x) : Option\none();
 }
 
-$opt = some(5);
+$opt = Option\some(5);
 $opt->andThen(fn($x) => parsePositive($x));  // Some(5)
 
-$opt2 = some(-1);
+$opt2 = Option\some(-1);
 $opt2->andThen(fn($x) => parsePositive($x));  // None
 ```
 
@@ -261,11 +261,11 @@ $opt2->andThen(fn($x) => parsePositive($x));  // None
 左が None なら右を返します。
 
 ```php
-$a = some(1);
-$b = some(2);
+$a = Option\some(1);
+$b = Option\some(2);
 
 $a->or($b);       // Some(1)
-none()->or($b);   // Some(2)
+Option\none()->or($b);   // Some(2)
 ```
 
 ### orElse
@@ -273,8 +273,8 @@ none()->or($b);   // Some(2)
 左が None なら右を遅延評価します。
 
 ```php
-$none = none();
-$none->orElse(fn() => some(fetchDefault()));
+$none = Option\none();
+$none->orElse(fn() => Option\some(fetchDefault()));
 ```
 
 ### orThrow
@@ -282,10 +282,10 @@ $none->orElse(fn() => some(fetchDefault()));
 None の場合に例外をスローし、Some の場合はそのまま返します。
 
 ```php
-$opt = some(42);
+$opt = Option\some(42);
 $opt->orThrow(new Exception('エラー'));  // Some(42)
 
-$none = none();
+$none = Option\none();
 $none->orThrow(new Exception('エラー'));  // Exception をスロー
 ```
 
@@ -294,13 +294,13 @@ $none->orThrow(new Exception('エラー'));  // Exception をスロー
 どちらか一方だけが Some の場合、その値を返します。
 
 ```php
-$a = some(1);
-$b = some(2);
+$a = Option\some(1);
+$b = Option\some(2);
 
 $a->xor($b);        // None（両方 Some なので）
-$a->xor(none());    // Some(1)
-none()->xor($b);    // Some(2)
-none()->xor(none()); // None
+$a->xor(Option\none());    // Some(1)
+Option\none()->xor($b);    // Some(2)
+Option\none()->xor(Option\none()); // None
 ```
 
 ## Result への変換
@@ -310,12 +310,12 @@ none()->xor(none()); // None
 Some を Ok に、None を指定したエラーの Err に変換します。
 
 ```php
-use function WizDevelop\PhpMonad\Option\some;
+use WizDevelop\PhpMonad\Option;
 
-$opt = some(42);
+$opt = Option\some(42);
 $result = $opt->okOr('エラー');  // Ok(42)
 
-$none = none();
+$none = Option\none();
 $result = $none->okOr('エラー');  // Err('エラー')
 ```
 
@@ -324,7 +324,7 @@ $result = $none->okOr('エラー');  // Err('エラー')
 エラー値を遅延評価します。
 
 ```php
-$none = none();
+$none = Option\none();
 $result = $none->okOrElse(fn() => createError());
 ```
 
@@ -335,13 +335,13 @@ $result = $none->okOrElse(fn() => createError());
 `Option<Option<T>>` を `Option<T>` に平坦化します。
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none, flatten};
+use WizDevelop\PhpMonad\Option;
 
-$nested = some(some(42));
-flatten($nested);  // Some(42)
+$nested = Option\some(Option\some(42));
+Option\flatten($nested);  // Some(42)
 
-$nested2 = some(none());
-flatten($nested2);  // None
+$nested2 = Option\some(Option\none());
+Option\flatten($nested2);  // None
 ```
 
 ### transpose
@@ -349,12 +349,12 @@ flatten($nested2);  // None
 `Option<Result<T, E>>` を `Result<Option<T>, E>` に変換します。
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none, transpose};
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
 
-transpose(some(ok(42)));    // Ok(Some(42))
-transpose(some(err('e')));  // Err('e')
-transpose(none());          // Ok(None)
+Option\transpose(Option\some(Result\ok(42)));    // Ok(Some(42))
+Option\transpose(Option\some(Result\err('e')));  // Err('e')
+Option\transpose(Option\none());                  // Ok(None)
 ```
 
 ## イテレーション
@@ -362,13 +362,13 @@ transpose(none());          // Ok(None)
 Option は `IteratorAggregate` を実装しているため、foreach で使用できます。
 
 ```php
-$opt = some(42);
+$opt = Option\some(42);
 
 foreach ($opt as $value) {
     echo $value;  // 42
 }
 
-$none = none();
+$none = Option\none();
 
 foreach ($none as $value) {
     // 実行されない
@@ -391,7 +391,7 @@ if ($user !== null) {
 $displayName = $name ?? 'Anonymous';
 
 // After
-$displayName = fromValue($user)
+$displayName = Option\fromValue($user)
     ->map(fn($u) => $u->getProfile())
     ->map(fn($p) => $p->getName())
     ->unwrapOr('Anonymous');
@@ -401,7 +401,7 @@ $displayName = fromValue($user)
 
 ```php
 function getArrayValue(array $arr, string $key): Option {
-    return fromValue($arr[$key] ?? null);
+    return Option\fromValue($arr[$key] ?? null);
 }
 
 $value = getArrayValue($config, 'timeout')

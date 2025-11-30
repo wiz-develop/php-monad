@@ -19,9 +19,9 @@ composer require wiz-develop/php-monad
 ### Option
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none, fromValue};
+use WizDevelop\PhpMonad\Option;
 
-$name = fromValue($user['name'] ?? null)
+$name = Option\fromValue($user['name'] ?? null)
     ->map(fn($n) => strtoupper($n))
     ->filter(fn($n) => strlen($n) > 0)
     ->unwrapOr('Anonymous');
@@ -30,9 +30,9 @@ $name = fromValue($user['name'] ?? null)
 ### Result
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable};
+use WizDevelop\PhpMonad\Result;
 
-$result = fromThrowable(
+$result = Result\fromThrowable(
     fn() => json_decode($json, flags: JSON_THROW_ON_ERROR),
     fn($e) => "Parse error: {$e->getMessage()}"
 );

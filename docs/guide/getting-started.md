@@ -24,9 +24,9 @@ if ($user !== null) {
 Option モナドを使うと、null チェックを型で表現できます。
 
 ```php
-use function WizDevelop\PhpMonad\Option\fromValue;
+use WizDevelop\PhpMonad\Option;
 
-$upperName = fromValue($user)
+$upperName = Option\fromValue($user)
     ->map(fn($u) => $u->getName())
     ->map(fn($n) => strtoupper($n))
     ->unwrapOr('Unknown');
@@ -49,9 +49,9 @@ try {
 Result モナドを使うと、成功と失敗を型で表現できます。
 
 ```php
-use function WizDevelop\PhpMonad\Result\fromThrowable;
+use WizDevelop\PhpMonad\Result;
 
-$result = fromThrowable(
+$result = Result\fromThrowable(
     fn() => json_decode($json, flags: JSON_THROW_ON_ERROR),
     fn($e) => "パースエラー: {$e->getMessage()}"
 )
@@ -81,10 +81,10 @@ Option は「値の有無」を表現する型です。
 - `None`: 値がない状態
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none};
+use WizDevelop\PhpMonad\Option;
 
-$some = some(42);    // Some<int>
-$none = none();      // None
+$some = Option\some(42);    // Some<int>
+$none = Option\none();      // None
 ```
 
 ### Result モナド
@@ -95,10 +95,10 @@ Result は「成功または失敗」を表現する型です。
 - `Err<E>`: エラー値を保持している状態
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
-$ok = ok(42);            // Ok<int>
-$err = err('error');     // Err<string>
+$ok = Result\ok(42);            // Ok<int>
+$err = Result\err('error');     // Err<string>
 ```
 
 ### メソッドチェーン
@@ -106,7 +106,7 @@ $err = err('error');     // Err<string>
 モナドの値は、メソッドチェーンで変換できます。
 
 ```php
-$result = some(5)
+$result = Option\some(5)
     ->map(fn($x) => $x * 2)      // Some(10)
     ->filter(fn($x) => $x > 5)   // Some(10)
     ->map(fn($x) => "値: $x")    // Some("値: 10")
@@ -116,7 +116,7 @@ $result = some(5)
 `None` や `Err` の場合、処理はスキップされます。
 
 ```php
-$result = none()
+$result = Option\none()
     ->map(fn($x) => $x * 2)      // None (スキップ)
     ->filter(fn($x) => $x > 5)   // None (スキップ)
     ->unwrapOr('デフォルト');     // "デフォルト"

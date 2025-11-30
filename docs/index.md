@@ -39,14 +39,14 @@ composer require wiz-develop/php-monad
 ### Option の使用例
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none, fromValue};
+use WizDevelop\PhpMonad\Option;
 
 // 値を Option でラップ
-$value = some(42);           // Some<int>
-$empty = none();             // None
+$value = Option\some(42);           // Some<int>
+$empty = Option\none();             // None
 
 // null かもしれない値を安全に処理
-$name = fromValue($user['name'] ?? null);
+$name = Option\fromValue($user['name'] ?? null);
 
 $result = $name
     ->map(fn($n) => strtoupper($n))      // 値があれば変換
@@ -57,14 +57,14 @@ $result = $name
 ### Result の使用例
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, fromThrowable};
+use WizDevelop\PhpMonad\Result;
 
 // 成功 / 失敗を明示的に表現
-$success = ok(42);           // Ok<int>
-$failure = err('error');     // Err<string>
+$success = Result\ok(42);           // Ok<int>
+$failure = Result\err('error');     // Err<string>
 
 // 例外を Result に変換
-$result = fromThrowable(
+$result = Result\fromThrowable(
     fn() => json_decode($json, flags: JSON_THROW_ON_ERROR),
     fn(Throwable $e) => "JSON パースエラー: {$e->getMessage()}"
 );

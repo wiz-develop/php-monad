@@ -5,15 +5,16 @@ PHP Monad は、モナドを簡単に作成・操作するためのヘルパー�
 ## Option ヘルパー関数
 
 ```php
-use function WizDevelop\PhpMonad\Option\{
-    some,
-    none,
-    fromValue,
-    of,
-    tryOf,
-    flatten,
-    transpose
-};
+use WizDevelop\PhpMonad\Option;
+
+// 利用可能な関数
+Option\some($value);
+Option\none();
+Option\fromValue($value, $noneValue = null);
+Option\of($callback, $noneValue = null);
+Option\tryOf($callback, $noneValue = null, $exceptionClass = Exception::class);
+Option\flatten($option);
+Option\transpose($option);
 ```
 
 ### some
@@ -32,9 +33,9 @@ function some(mixed $value): Some
 #### 使用例
 
 ```php
-$opt = some(42);        // Some<int>
-$opt = some('hello');   // Some<string>
-$opt = some([1, 2, 3]); // Some<array>
+$opt = Option\some(42);        // Some<int>
+$opt = Option\some('hello');   // Some<string>
+$opt = Option\some([1, 2, 3]); // Some<array>
 ```
 
 ### none
@@ -48,7 +49,7 @@ function none(): None
 #### 使用例
 
 ```php
-$opt = none();  // None
+$opt = Option\none();  // None
 ```
 
 ### fromValue
@@ -69,10 +70,10 @@ function fromValue($value, mixed $noneValue = null): Option
 #### 使用例
 
 ```php
-$opt = fromValue($user);              // null なら None
-$opt = fromValue($count, 0);          // 0 なら None
-$opt = fromValue($name, '');          // 空文字なら None
-$opt = fromValue($data, false);       // false なら None
+$opt = Option\fromValue($user);              // null なら None
+$opt = Option\fromValue($count, 0);          // 0 なら None
+$opt = Option\fromValue($name, '');          // 空文字なら None
+$opt = Option\fromValue($data, false);       // false なら None
 ```
 
 ### of
@@ -93,8 +94,8 @@ function of(callable $callback, mixed $noneValue = null): Option
 #### 使用例
 
 ```php
-$opt = of(fn() => getUser($id));
-$opt = of(fn() => findByKey($array, $key), false);
+$opt = Option\of(fn() => getUser($id));
+$opt = Option\of(fn() => findByKey($array, $key), false);
 ```
 
 ### tryOf
@@ -122,13 +123,13 @@ function tryOf(
 #### 使用例
 
 ```php
-$date = tryOf(
+$date = Option\tryOf(
     fn() => new DateTimeImmutable($input),
     null,
     DateMalformedStringException::class
 );
 
-$json = tryOf(
+$json = Option\tryOf(
     fn() => json_decode($str, flags: JSON_THROW_ON_ERROR),
     null,
     JsonException::class
@@ -151,11 +152,11 @@ function flatten(Option $option): Option
 #### 使用例
 
 ```php
-$nested = some(some(42));
-$flat = flatten($nested);  // Some(42)
+$nested = Option\some(Option\some(42));
+$flat = Option\flatten($nested);  // Some(42)
 
-$nested = some(none());
-$flat = flatten($nested);  // None
+$nested = Option\some(Option\none());
+$flat = Option\flatten($nested);  // None
 ```
 
 ### transpose
@@ -175,24 +176,25 @@ function transpose(Option $option): Result
 #### 使用例
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
-transpose(some(ok(42)));    // Ok(Some(42))
-transpose(some(err('e')));  // Err('e')
-transpose(none());          // Ok(None)
+Option\transpose(Option\some(Result\ok(42)));    // Ok(Some(42))
+Option\transpose(Option\some(Result\err('e')));  // Err('e')
+Option\transpose(Option\none());                  // Ok(None)
 ```
 
 ## Result ヘルパー関数
 
 ```php
-use function WizDevelop\PhpMonad\Result\{
-    ok,
-    err,
-    fromThrowable,
-    flatten,
-    transpose,
-    combine
-};
+use WizDevelop\PhpMonad\Result;
+
+// 利用可能な関数
+Result\ok($value = true);
+Result\err($value);
+Result\fromThrowable($closure, $errorHandler);
+Result\flatten($result);
+Result\transpose($result);
+Result\combine(...$results);
 ```
 
 ### ok
@@ -211,9 +213,9 @@ function ok(mixed $value = true): Ok
 #### 使用例
 
 ```php
-$result = ok(42);       // Ok<int>
-$result = ok('data');   // Ok<string>
-$result = ok();         // Ok<true>
+$result = Result\ok(42);       // Ok<int>
+$result = Result\ok('data');   // Ok<string>
+$result = Result\ok();         // Ok<true>
 ```
 
 ### err
@@ -232,9 +234,9 @@ function err(mixed $value): Err
 #### 使用例
 
 ```php
-$result = err('エラー');                // Err<string>
-$result = err(['code' => 'E001']);      // Err<array>
-$result = err(new Exception('失敗'));   // Err<Exception>
+$result = Result\err('エラー');                // Err<string>
+$result = Result\err(['code' => 'E001']);      // Err<array>
+$result = Result\err(new Exception('失敗'));   // Err<Exception>
 ```
 
 ### fromThrowable
@@ -255,12 +257,12 @@ function fromThrowable(Closure $closure, Closure $errorHandler): Result
 #### 使用例
 
 ```php
-$result = fromThrowable(
+$result = Result\fromThrowable(
     fn() => json_decode($json, flags: JSON_THROW_ON_ERROR),
     fn($e) => "パースエラー: {$e->getMessage()}"
 );
 
-$result = fromThrowable(
+$result = Result\fromThrowable(
     fn() => file_get_contents($path),
     fn($e) => ['type' => 'io_error', 'message' => $e->getMessage()]
 );
@@ -283,14 +285,14 @@ function flatten(Result $result): Result
 #### 使用例
 
 ```php
-$nested = ok(ok(42));
-$flat = flatten($nested);  // Ok(42)
+$nested = Result\ok(Result\ok(42));
+$flat = Result\flatten($nested);  // Ok(42)
 
-$nested = ok(err('inner'));
-$flat = flatten($nested);  // Err('inner')
+$nested = Result\ok(Result\err('inner'));
+$flat = Result\flatten($nested);  // Err('inner')
 
-$nested = err('outer');
-$flat = flatten($nested);  // Err('outer')
+$nested = Result\err('outer');
+$flat = Result\flatten($nested);  // Err('outer')
 ```
 
 ### transpose
@@ -310,11 +312,11 @@ function transpose(Result $result): Option
 #### 使用例
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none};
+use WizDevelop\PhpMonad\Option;
 
-transpose(ok(some(42)));   // Some(Ok(42))
-transpose(ok(none()));     // None
-transpose(err('error'));   // Some(Err('error'))
+Result\transpose(Result\ok(Option\some(42)));   // Some(Ok(42))
+Result\transpose(Result\ok(Option\none()));     // None
+Result\transpose(Result\err('error'));          // Some(Err('error'))
 ```
 
 ### combine
@@ -335,16 +337,16 @@ function combine(Result ...$results): Result
 
 ```php
 // 全て成功
-$result = combine(ok(1), ok(2), ok(3));
+$result = Result\combine(Result\ok(1), Result\ok(2), Result\ok(3));
 $result->isOk();  // true
 $result->unwrap();  // true
 
 // 一部失敗
-$result = combine(
-    ok(1),
-    err('エラー1'),
-    ok(2),
-    err('エラー2')
+$result = Result\combine(
+    Result\ok(1),
+    Result\err('エラー1'),
+    Result\ok(2),
+    Result\err('エラー2')
 );
 
 $result->isErr();  // true
@@ -355,7 +357,7 @@ $result->unwrapErr();  // ['エラー1', 'エラー2']
 `combine` はフォームバリデーションで特に便利です。
 
 ```php
-$result = combine(
+$result = Result\combine(
     validateEmail($email),
     validatePassword($password),
     validateAge($age)

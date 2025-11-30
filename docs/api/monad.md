@@ -53,11 +53,11 @@ $ok = Ok::unit(42);      // Ok<int>
 通常は `unit` を直接呼び出すのではなく、ヘルパー関数を使用します。
 
 ```php
-use function WizDevelop\PhpMonad\Option\some;
-use function WizDevelop\PhpMonad\Result\ok;
+use WizDevelop\PhpMonad\Option;
+use WizDevelop\PhpMonad\Result;
 
-$some = some(42);
-$ok = ok(42);
+$some = Option\some(42);
+$ok = Result\ok(42);
 ```
 :::
 
@@ -80,26 +80,26 @@ public function andThen(Closure $right): self;
 #### 使用例
 
 ```php
-use function WizDevelop\PhpMonad\Option\{some, none};
+use WizDevelop\PhpMonad\Option;
 
 function double(int $x): Option {
-    return some($x * 2);
+    return Option\some($x * 2);
 }
 
-$result = some(5)->andThen(double(...));  // Some(10)
-$result = none()->andThen(double(...));   // None
+$result = Option\some(5)->andThen(double(...));  // Some(10)
+$result = Option\none()->andThen(double(...));   // None
 ```
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
 function divide(int $x): Result {
-    return $x === 0 ? err('ゼロ除算') : ok(100 / $x);
+    return $x === 0 ? Result\err('ゼロ除算') : Result\ok(100 / $x);
 }
 
-$result = ok(10)->andThen(divide(...));  // Ok(10)
-$result = ok(0)->andThen(divide(...));   // Err('ゼロ除算')
-$result = err('e')->andThen(divide(...));  // Err('e')
+$result = Result\ok(10)->andThen(divide(...));  // Ok(10)
+$result = Result\ok(0)->andThen(divide(...));   // Err('ゼロ除算')
+$result = Result\err('e')->andThen(divide(...));  // Err('e')
 ```
 
 ## イテレーション
@@ -107,13 +107,13 @@ $result = err('e')->andThen(divide(...));  // Err('e')
 Monad は `IteratorAggregate` を実装しているため、foreach で使用できます。
 
 ```php
-$option = some(42);
+$option = Option\some(42);
 
 foreach ($option as $value) {
     echo $value;  // 42
 }
 
-$none = none();
+$none = Option\none();
 
 foreach ($none as $value) {
     // 実行されない

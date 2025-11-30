@@ -10,10 +10,10 @@ Result には 2 つの状態があります。
 - `Err<E>`: エラー値 `E` を保持している状態
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
-$success = ok(42);        // Ok<int> - 成功
-$failure = err('error');  // Err<string> - 失敗
+$success = Result\ok(42);        // Ok<int> - 成功
+$failure = Result\err('error');  // Err<string> - 失敗
 ```
 
 ## Result を作成する
@@ -23,11 +23,11 @@ $failure = err('error');  // Err<string> - 失敗
 最も基本的な作成方法です。
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err};
+use WizDevelop\PhpMonad\Result;
 
-$success = ok(42);           // Ok<int>
-$successBool = ok();         // Ok<true>（引数省略時は true）
-$failure = err('error');     // Err<string>
+$success = Result\ok(42);           // Ok<int>
+$successBool = Result\ok();         // Ok<true>（引数省略時は true）
+$failure = Result\err('error');     // Err<string>
 ```
 
 ### fromThrowable
@@ -35,9 +35,9 @@ $failure = err('error');     // Err<string>
 例外をスローする可能性のある処理を Result に変換します。
 
 ```php
-use function WizDevelop\PhpMonad\Result\fromThrowable;
+use WizDevelop\PhpMonad\Result;
 
-$result = fromThrowable(
+$result = Result\fromThrowable(
     fn() => json_decode($json, flags: JSON_THROW_ON_ERROR),
     fn(Throwable $e) => "パースエラー: {$e->getMessage()}"
 );
@@ -51,7 +51,7 @@ $result = fromThrowable(
 ### isOk / isErr
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 
 if ($result->isOk()) {
     // 成功の場合の処理
@@ -67,16 +67,16 @@ if ($result->isErr()) {
 値があり、かつ述語を満たす場合に `true` を返します。
 
 ```php
-$result = ok(10);
+$result = Result\ok(10);
 
 $result->isOkAnd(fn($x) => $x > 5);   // true
 $result->isOkAnd(fn($x) => $x > 15);  // false
 
-err('e')->isOkAnd(fn($x) => true);    // false
+Result\err('e')->isOkAnd(fn($x) => true);    // false
 ```
 
 ```php
-$result = err('not found');
+$result = Result\err('not found');
 
 $result->isErrAnd(fn($e) => str_contains($e, 'not'));  // true
 ```
@@ -88,10 +88,10 @@ $result->isErrAnd(fn($e) => str_contains($e, 'not'));  // true
 成功値を取得します。Err の場合は例外をスローします。
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 $value = $result->unwrap();  // 42
 
-$err = err('error');
+$err = Result\err('error');
 $err->unwrap();  // 例外をスロー
 ```
 
@@ -100,10 +100,10 @@ $err->unwrap();  // 例外をスロー
 エラー値を取得します。Ok の場合は例外をスローします。
 
 ```php
-$result = err('error');
+$result = Result\err('error');
 $error = $result->unwrapErr();  // 'error'
 
-$ok = ok(42);
+$ok = Result\ok(42);
 $ok->unwrapErr();  // RuntimeException をスロー
 ```
 
@@ -112,10 +112,10 @@ $ok->unwrapErr();  // RuntimeException をスロー
 カスタムエラーメッセージで成功値を取得します。
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 $value = $result->expect('値が必要です');  // 42
 
-$err = err('error');
+$err = Result\err('error');
 $err->expect('値が必要です');  // RuntimeException: 値が必要です
 ```
 
@@ -124,10 +124,10 @@ $err->expect('値が必要です');  // RuntimeException: 値が必要です
 デフォルト値を指定して取得します。
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 $result->unwrapOr(0);   // 42
 
-$err = err('error');
+$err = Result\err('error');
 $err->unwrapOr(0);      // 0
 ```
 
@@ -136,7 +136,7 @@ $err->unwrapOr(0);      // 0
 デフォルト値を遅延評価で取得します。エラー値を引数として受け取れます。
 
 ```php
-$err = err('not found');
+$err = Result\err('not found');
 $err->unwrapOrElse(fn($e) => "エラー: $e");  // "エラー: not found"
 ```
 
@@ -145,7 +145,7 @@ $err->unwrapOrElse(fn($e) => "エラー: $e");  // "エラー: not found"
 Err の場合に指定した例外をスローします。
 
 ```php
-$err = err('error');
+$err = Result\err('error');
 $err->unwrapOrThrow(new NotFoundException('リソースが見つかりません'));
 ```
 
@@ -156,13 +156,13 @@ $err->unwrapOrThrow(new NotFoundException('リソースが見つかりません'
 成功値を変換します。Err の場合はスキップされます。
 
 ```php
-$result = ok(5);
+$result = Result\ok(5);
 
 $mapped = $result
     ->map(fn($x) => $x * 2)     // Ok(10)
     ->map(fn($x) => "値: $x");  // Ok("値: 10")
 
-$err = err('error');
+$err = Result\err('error');
 $err->map(fn($x) => $x * 2);    // Err('error')（スキップ）
 ```
 
@@ -171,10 +171,10 @@ $err->map(fn($x) => $x * 2);    // Err('error')（スキップ）
 エラー値を変換します。Ok の場合はスキップされます。
 
 ```php
-$err = err('not found');
+$err = Result\err('not found');
 $mapped = $err->mapErr(fn($e) => strtoupper($e));  // Err('NOT FOUND')
 
-$ok = ok(42);
+$ok = Result\ok(42);
 $ok->mapErr(fn($e) => strtoupper($e));  // Ok(42)（スキップ）
 ```
 
@@ -183,10 +183,10 @@ $ok->mapErr(fn($e) => strtoupper($e));  // Ok(42)（スキップ）
 成功値を変換するか、デフォルト値を返します。
 
 ```php
-$result = ok(5);
+$result = Result\ok(5);
 $result->mapOr(fn($x) => $x * 2, 0);   // 10
 
-$err = err('error');
+$err = Result\err('error');
 $err->mapOr(fn($x) => $x * 2, 0);      // 0
 ```
 
@@ -195,7 +195,7 @@ $err->mapOr(fn($x) => $x * 2, 0);      // 0
 成功値を変換するか、エラーからデフォルト値を計算します。
 
 ```php
-$err = err('not found');
+$err = Result\err('not found');
 $result = $err->mapOrElse(
     fn($x) => $x * 2,
     fn($e) => strlen($e)  // エラー文字列の長さ
@@ -207,11 +207,11 @@ $result = $err->mapOrElse(
 値を検査（副作用を実行）し、自身を返します。
 
 ```php
-$result = ok(42)
+$result = Result\ok(42)
     ->inspect(fn($x) => logger()->info("成功: $x"))
     ->map(fn($x) => $x * 2);
 
-$err = err('error')
+$err = Result\err('error')
     ->inspectErr(fn($e) => logger()->error("失敗: $e"))
     ->mapErr(fn($e) => new Exception($e));
 ```
@@ -223,13 +223,13 @@ $err = err('error')
 両方が Ok の場合、右側の Result を返します。
 
 ```php
-$a = ok(1);
-$b = ok(2);
+$a = Result\ok(1);
+$b = Result\ok(2);
 
 $a->and($b);  // Ok(2)
-$a->and(err('e'));  // Err('e')
+$a->and(Result\err('e'));  // Err('e')
 
-err('e')->and($b);  // Err('e')
+Result\err('e')->and($b);  // Err('e')
 ```
 
 ### andThen
@@ -239,11 +239,11 @@ err('e')->and($b);  // Err('e')
 ```php
 function divide(int $a, int $b): Result {
     return $b === 0
-        ? err('ゼロ除算')
-        : ok($a / $b);
+        ? Result\err('ゼロ除算')
+        : Result\ok($a / $b);
 }
 
-$result = ok(10)
+$result = Result\ok(10)
     ->andThen(fn($x) => divide($x, 2))   // Ok(5)
     ->andThen(fn($x) => divide($x, 0));  // Err('ゼロ除算')
 ```
@@ -253,11 +253,11 @@ $result = ok(10)
 左が Err なら右を返します。
 
 ```php
-$a = ok(1);
-$b = ok(2);
+$a = Result\ok(1);
+$b = Result\ok(2);
 
 $a->or($b);        // Ok(1)
-err('e')->or($b);  // Ok(2)
+Result\err('e')->or($b);  // Ok(2)
 ```
 
 ### orElse
@@ -265,8 +265,8 @@ err('e')->or($b);  // Ok(2)
 左が Err なら右を遅延評価します。エラー値を引数として受け取れます。
 
 ```php
-$err = err('primary failed');
-$result = $err->orElse(fn($e) => ok("fallback for: $e"));
+$err = Result\err('primary failed');
+$result = $err->orElse(fn($e) => Result\ok("fallback for: $e"));
 ```
 
 ### orThrow
@@ -274,10 +274,10 @@ $result = $err->orElse(fn($e) => ok("fallback for: $e"));
 Err の場合に例外をスローし、Ok の場合はそのまま返します。
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 $result->orThrow(new Exception('エラー'));  // Ok(42)
 
-$err = err('error');
+$err = Result\err('error');
 $err->orThrow(new Exception('エラー'));  // Exception をスロー
 ```
 
@@ -288,10 +288,10 @@ $err->orThrow(new Exception('エラー'));  // Exception をスロー
 Ok を Some に、Err を None に変換します。
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 $opt = $result->ok();  // Some(42)
 
-$err = err('error');
+$err = Result\err('error');
 $opt = $err->ok();     // None
 ```
 
@@ -300,10 +300,10 @@ $opt = $err->ok();     // None
 Err を Some に、Ok を None に変換します。
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 $opt = $result->err();  // None
 
-$err = err('error');
+$err = Result\err('error');
 $opt = $err->err();     // Some('error')
 ```
 
@@ -314,13 +314,13 @@ $opt = $err->err();     // Some('error')
 `Result<Result<T, E>, E>` を `Result<T, E>` に平坦化します。
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, flatten};
+use WizDevelop\PhpMonad\Result;
 
-$nested = ok(ok(42));
-flatten($nested);  // Ok(42)
+$nested = Result\ok(Result\ok(42));
+Result\flatten($nested);  // Ok(42)
 
-$nested2 = ok(err('inner error'));
-flatten($nested2);  // Err('inner error')
+$nested2 = Result\ok(Result\err('inner error'));
+Result\flatten($nested2);  // Err('inner error')
 ```
 
 ### transpose
@@ -328,12 +328,12 @@ flatten($nested2);  // Err('inner error')
 `Result<Option<T>, E>` を `Option<Result<T, E>>` に変換します。
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, transpose};
-use function WizDevelop\PhpMonad\Option\{some, none};
+use WizDevelop\PhpMonad\Result;
+use WizDevelop\PhpMonad\Option;
 
-transpose(ok(some(42)));   // Some(Ok(42))
-transpose(ok(none()));     // None
-transpose(err('error'));   // Some(Err('error'))
+Result\transpose(Result\ok(Option\some(42)));   // Some(Ok(42))
+Result\transpose(Result\ok(Option\none()));     // None
+Result\transpose(Result\err('error'));          // Some(Err('error'))
 ```
 
 ### combine
@@ -341,18 +341,18 @@ transpose(err('error'));   // Some(Err('error'))
 複数の Result を検証し、全て成功なら Ok、1 つでも失敗なら全エラーを Err で返します。
 
 ```php
-use function WizDevelop\PhpMonad\Result\{ok, err, combine};
+use WizDevelop\PhpMonad\Result;
 
 // 全て成功
-$result = combine(ok(1), ok(2), ok(3));
+$result = Result\combine(Result\ok(1), Result\ok(2), Result\ok(3));
 $result->isOk();  // true
 
 // 一部失敗
-$result = combine(
-    ok(1),
-    err('エラー1'),
-    ok(2),
-    err('エラー2')
+$result = Result\combine(
+    Result\ok(1),
+    Result\err('エラー1'),
+    Result\ok(2),
+    Result\err('エラー2')
 );
 
 $result->isErr();  // true
@@ -364,13 +364,13 @@ $result->unwrapErr();  // ['エラー1', 'エラー2']
 Result は `IteratorAggregate` を実装しているため、foreach で使用できます。
 
 ```php
-$result = ok(42);
+$result = Result\ok(42);
 
 foreach ($result as $value) {
     echo $value;  // 42
 }
 
-$err = err('error');
+$err = Result\err('error');
 
 foreach ($err as $value) {
     // 実行されない
@@ -393,7 +393,7 @@ function parseJson(string $json): array {
 
 // After
 function parseJson(string $json): Result {
-    return fromThrowable(
+    return Result\fromThrowable(
         fn() => json_decode($json, true, flags: JSON_THROW_ON_ERROR),
         fn($e) => "Invalid JSON: {$e->getMessage()}"
     );
@@ -405,23 +405,23 @@ function parseJson(string $json): Result {
 ```php
 function validateAge(int $age): Result {
     if ($age < 0) {
-        return err('年齢は 0 以上である必要があります');
+        return Result\err('年齢は 0 以上である必要があります');
     }
     if ($age > 150) {
-        return err('年齢は 150 以下である必要があります');
+        return Result\err('年齢は 150 以下である必要があります');
     }
-    return ok($age);
+    return Result\ok($age);
 }
 
 function validateName(string $name): Result {
     if (strlen($name) === 0) {
-        return err('名前は必須です');
+        return Result\err('名前は必須です');
     }
-    return ok($name);
+    return Result\ok($name);
 }
 
 // 複数のバリデーションを結合
-$result = combine(
+$result = Result\combine(
     validateAge($age),
     validateName($name)
 );
@@ -435,11 +435,11 @@ if ($result->isErr()) {
 ### エラーの変換
 
 ```php
-$result = fromThrowable(
+$result = Result\fromThrowable(
     fn() => file_get_contents($path),
     fn($e) => ['code' => 'FILE_READ_ERROR', 'message' => $e->getMessage()]
 )
-->andThen(fn($content) => fromThrowable(
+->andThen(fn($content) => Result\fromThrowable(
     fn() => json_decode($content, flags: JSON_THROW_ON_ERROR),
     fn($e) => ['code' => 'JSON_PARSE_ERROR', 'message' => $e->getMessage()]
 ))
